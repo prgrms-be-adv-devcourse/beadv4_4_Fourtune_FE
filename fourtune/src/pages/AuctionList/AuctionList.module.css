@@ -1,0 +1,126 @@
+.pageContainer {
+    padding-bottom: 4rem;
+}
+
+.headerSection {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.searchBar {
+    display: flex;
+    gap: 1rem;
+    max-width: 600px;
+}
+
+.searchInput {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.2s;
+}
+
+.searchInput:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    outline: none;
+}
+
+.filters {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.select {
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-bg-surface);
+    cursor: pointer;
+    min-width: 150px;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center;
+    background-repeat: no-repeat;
+    background-size: 1.5em 1.5em;
+    appearance: none;
+}
+
+.select:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 2rem;
+}
+
+@media (min-width: 640px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .headerSection {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+
+    .searchBar {
+        width: 100%;
+    }
+}
+
+@media (min-width: 1280px) {
+    .grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.loader {
+    text-align: center;
+    padding: 4rem;
+    color: var(--color-text-muted);
+}
+
+.pagination {
+    margin-top: 3rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.pageBtn {
+    width: 2.5rem;
+    height: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+}
+
+.pageBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pageBtn.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+}

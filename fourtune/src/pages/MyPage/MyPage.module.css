@@ -1,0 +1,107 @@
+.container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 2rem;
+    min-height: 80vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    padding: 1.5rem;
+    height: fit-content;
+    flex-shrink: 0;
+}
+
+.profileInfo {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    background: var(--color-bg-surface-hover);
+    border-radius: 50%;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+
+.username {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.email {
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.menuItem {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.menuItem:hover {
+    background: var(--color-bg-surface-hover);
+    color: var(--color-text-main);
+}
+
+.activeMenu {
+    background: var(--color-primary);
+    color: white;
+}
+
+.activeMenu:hover {
+    background: var(--color-primary-hover);
+    color: white;
+}
+
+.content {
+    flex: 1;
+    background: var(--color-bg-surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    padding: 2rem;
+}
+
+.sectionTitle {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+/* Reusing grid layout */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 4rem;
+    color: var(--color-text-muted);
+}

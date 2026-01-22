@@ -13,11 +13,8 @@ const MyPage: React.FC = () => {
     const [wishlistItems, setWishlistItems] = useState<AuctionItem[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // Mock User Data
-    const user = {
-        username: "User123",
-        email: "user@example.com"
-    };
+    // User Data
+    const user = api.getCurrentUser() || { name: 'Unknown', email: 'unknown@example.com' };
 
     const isAuthenticated = api.isAuthenticated();
 
@@ -106,7 +103,7 @@ const MyPage: React.FC = () => {
             <aside className={classes.sidebar}>
                 <div className={classes.profileInfo}>
                     <div className={classes.avatar}>👤</div>
-                    <div className={classes.username}>{user.username}</div>
+                    <div className={classes.username}>{user.name}</div>
                     <div className={classes.email}>{user.email}</div>
                 </div>
                 <nav className={classes.menu}>

@@ -16,4 +16,5 @@ export interface ApiService {
     signup(username: string, email: string, password?: string): Promise<{ user: { email: string; name: string } }>;
     logout(): void;
     isAuthenticated(): boolean;
+    getCurrentUser(): { email: string; name: string } | null;
 }

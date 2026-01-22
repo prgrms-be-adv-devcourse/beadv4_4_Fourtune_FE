@@ -33,8 +33,8 @@ export const mockApi: ApiService = {
         if (params.sort === 'POPULAR') {
             filtered.sort((a, b) => b.currentPrice - a.currentPrice); // Mock popular by price
         } else {
-            // Default LATEST (by id desc for mock)
-            filtered.sort((a, b) => b.auctionItemId - a.auctionItemId);
+            // Default LATEST (Sort by createdAt desc)
+            filtered.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
         }
 
         // Pagination
@@ -63,19 +63,29 @@ export const mockApi: ApiService = {
     // Mock Auth
     login: async (email: string) => {
         await delay(800);
+        const user = { email, name: 'Test User' };
         localStorage.setItem('token', 'mock-jwt-token');
-        return { user: { email, name: 'Test User' } };
+        localStorage.setItem('user', JSON.stringify(user));
+        return { user };
     },
 
     signup: async (username: string, email: string) => {
         await delay(800);
+        const user = { email, name: username };
         localStorage.setItem('token', 'mock-jwt-token');
-        return { user: { email, name: username } };
+        localStorage.setItem('user', JSON.stringify(user));
+        return { user };
     },
 
     logout: () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('user');
     },
 
-    isAuthenticated: () => !!localStorage.getItem('token')
+    isAuthenticated: () => !!localStorage.getItem('token'),
+
+    getCurrentUser: () => {
+        const userStr = localStorage.getItem('user');
+        return userStr ? JSON.parse(userStr) : null;
+    }
 };

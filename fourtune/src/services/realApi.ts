@@ -53,5 +53,10 @@ export const realApi: ApiService = {
         // client.post('/api/auth/logout').catch(() => {});
     },
 
-    isAuthenticated: () => !!localStorage.getItem('token')
+    isAuthenticated: () => !!localStorage.getItem('token'),
+
+    getCurrentUser: () => {
+        const userStr = localStorage.getItem('user');
+        return userStr ? JSON.parse(userStr) : null;
+    }
 };

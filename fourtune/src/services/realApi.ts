@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { type ApiService } from './api.interface';
 
-// Use empty baseURL to leverage Vite's proxy configuration
-// The proxy will forward /api/* requests to the backend server
+// Use VITE_BACKEND_URL environment variable for backend server address
+// This keeps the backend URL secure and not exposed in the codebase
+const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
 const client = axios.create({
-    baseURL: '',
+    baseURL: backendUrl,
     headers: {
         'Content-Type': 'application/json',
     },

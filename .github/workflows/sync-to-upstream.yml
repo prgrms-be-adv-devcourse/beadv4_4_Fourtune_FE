@@ -8,13 +8,13 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+          persist-credentials: false
+
       - name: Add upstream remote
         run: |
           git remote add upstream https://github.com/prgrms-be-adv-devcourse/beadv4_4_Fourtune_FE.git || true
@@ -24,4 +24,4 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git push https://${PAT_TOKEN}@github.com/prgrms-be-adv-devcourse/beadv4_4_Fourtune_FE.git main:main
+          git push https://x-access-token:${PAT_TOKEN}@github.com/prgrms-be-adv-devcourse/beadv4_4_Fourtune_FE.git main:main

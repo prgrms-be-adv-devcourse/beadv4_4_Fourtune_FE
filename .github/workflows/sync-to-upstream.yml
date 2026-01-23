@@ -1,0 +1,27 @@
+name: Sync Fork to Upstream
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Add upstream remote
+        run: |
+          git remote add upstream https://github.com/prgrms-be-adv-devcourse/beadv4_4_Fourtune_FE.git || true
+          git fetch upstream
+      
+      - name: Push to upstream
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git push https://${PAT_TOKEN}@github.com/prgrms-be-adv-devcourse/beadv4_4_Fourtune_FE.git main:main

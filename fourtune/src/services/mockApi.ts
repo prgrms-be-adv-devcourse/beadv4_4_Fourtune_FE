@@ -69,9 +69,9 @@ export const mockApi: ApiService = {
         return { user };
     },
 
-    signup: async (username: string, email: string) => {
+    signup: async (nickname: string, email: string) => {
         await delay(800);
-        const user = { email, name: username };
+        const user = { email, name: nickname };
         localStorage.setItem('token', 'mock-jwt-token');
         localStorage.setItem('user', JSON.stringify(user));
         return { user };

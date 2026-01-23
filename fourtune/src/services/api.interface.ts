@@ -13,7 +13,7 @@ export interface ApiService {
     getAuctionById(id: number): Promise<AuctionItem>;
 
     login(email: string, password?: string): Promise<{ user: { email: string; name: string } }>;
-    signup(username: string, email: string, password?: string): Promise<{ user: { email: string; name: string } }>;
+    signup(nickname: string, email: string, password?: string, phoneNumber?: string): Promise<{ user: { email: string; name: string } }>;
     logout(): void;
     isAuthenticated(): boolean;
     getCurrentUser(): { email: string; name: string } | null;

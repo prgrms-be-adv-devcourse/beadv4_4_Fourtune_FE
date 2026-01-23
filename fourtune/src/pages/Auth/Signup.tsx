@@ -4,9 +4,10 @@ import classes from './Auth.module.css';
 import { api } from '../../services/api';
 
 const Signup: React.FC = () => {
-    const [username, setUsername] = useState('');
+    const [nickname, setNickname] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -14,10 +15,18 @@ const Signup: React.FC = () => {
         e.preventDefault();
         setIsLoading(true);
         try {
-            await api.signup(username, email, password);
+            await api.signup(nickname, email, password, phoneNumber);
             navigate('/');
-        } catch (error) {
-            alert('Signup failed');
+        } catch (error: any) {
+            let message = '회원가입에 실패했습니다.';
+            if (error.response && error.response.data) {
+                if (typeof error.response.data === 'string') {
+                    message = error.response.data;
+                } else if (error.response.data.message) {
+                    message = error.response.data.message;
+                }
+            }
+            alert(message);
         } finally {
             setIsLoading(false);
         }
@@ -37,14 +46,14 @@ const Signup: React.FC = () => {
                 <h1 className={classes.title}>회원가입</h1>
                 <form onSubmit={handleSubmit} className={classes.form}>
                     <div className={classes.formGroup}>
-                        <label htmlFor="username" className={classes.label}>사용자 이름</label>
+                        <label htmlFor="nickname" className={classes.label}>사용자 이름 (닉네임)</label>
                         <input
-                            id="username"
+                            id="nickname"
                             type="text"
                             className={classes.input}
                             placeholder="홍길동"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={nickname}
+                            onChange={(e) => setNickname(e.target.value)}
                             required
                         />
                     </div>
@@ -69,6 +78,20 @@ const Signup: React.FC = () => {
                             placeholder="••••••••"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className={classes.formGroup}>
+                        <label htmlFor="phoneNumber" className={classes.label}>전화번호</label>
+                        <input
+                            id="phoneNumber"
+                            type="tel"
+                            className={classes.input}
+                            placeholder="010-1234-5678"
+                            pattern="^01(?:0|1|[6-9])-(?:\d{3}|\d{4})-\d{4}$"
+                            title="010-1234-5678 형식으로 입력해주세요."
+                            value={phoneNumber}
+                            onChange={(e) => setPhoneNumber(e.target.value)}
                             required
                         />
                     </div>

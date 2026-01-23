@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { type ApiService } from './api.interface';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
-
+// Use empty baseURL to leverage Vite's proxy configuration
+// The proxy will forward /api/* requests to the backend server
 const client = axios.create({
-    baseURL: API_URL,
+    baseURL: '',
     headers: {
         'Content-Type': 'application/json',
     },
@@ -41,10 +41,10 @@ export const realApi: ApiService = {
         return { user: { email, name: 'User' } };
     },
 
-    signup: async (username, email, password) => {
+    signup: async (nickname, email, password, phoneNumber) => {
         // Backend returns Void (201 Created)
-        await client.post('/api/users/signup', { username, email, password });
-        return { user: { email, name: username } };
+        await client.post('/api/users/signup', { nickname, email, password, phoneNumber });
+        return { user: { email, name: nickname } };
     },
 
     logout: () => {

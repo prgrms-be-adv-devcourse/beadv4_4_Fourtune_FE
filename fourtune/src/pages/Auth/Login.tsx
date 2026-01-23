@@ -15,8 +15,16 @@ const Login: React.FC = () => {
         try {
             await api.login(email, password);
             navigate('/');
-        } catch (error) {
-            alert('Login failed');
+        } catch (error: any) {
+            let message = '로그인에 실패했습니다.';
+            if (error.response && error.response.data) {
+                if (typeof error.response.data === 'string') {
+                    message = error.response.data;
+                } else if (error.response.data.message) {
+                    message = error.response.data.message;
+                }
+            }
+            alert(message);
         } finally {
             setIsLoading(false);
         }

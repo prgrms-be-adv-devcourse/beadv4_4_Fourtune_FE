@@ -78,18 +78,31 @@ const CreateAuction: React.FC = () => {
             alert('경매 상품이 등록되었습니다!');
             navigate(`/auctions/${createdAuction.auctionItemId}`);
         } catch (e) {
-            const error = e as AxiosError<string | { message: string }>;
+            const error = e as AxiosError<any>;
+            console.error('Auction creation error:', error);
+
             let message = '경매 상품 등록에 실패했습니다.';
-            if (error.response && error.response.data) {
+            let details = '';
+
+            if (error.response) {
+                // Server responded with a status code out of 2xx range
+                message = `서버 오류 (${error.response.status})`;
                 if (typeof error.response.data === 'string') {
-                    message = error.response.data;
-                } else if (error.response.data.message) {
-                    message = error.response.data.message;
+                    details = error.response.data;
+                } else if (error.response.data && typeof error.response.data === 'object') {
+                    // Prettify JSON object to show field names
+                    details = JSON.stringify(error.response.data, null, 2);
+                    if (error.response.data.message) {
+                        message = error.response.data.message;
+                    }
                 }
-            } else if (error.message) {
+            } else if (error.request) {
+                message = '서버로부터 응답이 없습니다.';
+            } else {
                 message = error.message;
             }
-            alert(message);
+
+            alert(`${message}\n\n상세 정보: ${details}`);
         } finally {
             setIsLoading(false);
         }

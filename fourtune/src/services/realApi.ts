@@ -19,12 +19,45 @@ client.interceptors.request.use((config) => {
 
 export const realApi: ApiService = {
     searchAuctions: async (params) => {
-        const response = await client.get('/api/auctions', { params });
-        return response.data;
+        const queryParams = {
+            keyword: params.keyword,
+            categories: params.category, // Backend expects Set<String>, single value works as comma-separated or repeated param
+            statuses: params.status,
+            sort: params.sort || 'LATEST',
+            page: (params.page || 0) + 1, // Frontend 0-based, Backend 1-based (assumed from typical Spring Pageable, verified in Controller default=1)
+            size: params.size || 10,
+        };
+
+        const response = await client.get('/api/v1/search/auction-items', { params: queryParams });
+        const data = response.data; // SearchResultPage
+
+        // Map backend SearchAuctionItemView to frontend AuctionItem interface
+        const items = data.items.map((item: any) => ({
+            auctionItemId: item.auctionItemId,
+            title: item.title,
+            description: item.description,
+            category: item.category,
+            status: item.status,
+            startPrice: item.startPrice,
+            currentPrice: item.currentPrice,
+            startAt: item.startAt || '',
+            endAt: item.endAt || '',
+            imageUrls: item.thumbnailUrl ? [item.thumbnailUrl] : [], // Map thumbnail to array
+            createdAt: item.createdAt || '',
+            updatedAt: item.updatedAt || '',
+            // Additional fields from ES view if needed in UI: viewCount, etc.
+        }));
+
+        return {
+            items,
+            page: data.page - 1,   // Convert back to 0-based
+            size: data.size,
+            totalPages: Math.ceil(data.totalElements / data.size) // Calculate totalPages from totalElements
+        };
     },
 
     getAuctionById: async (id: number) => {
-        const response = await client.get(`/api/auctions/${id}`);
+        const response = await client.get(`/api/v1/auctions/${id}`);
         return response.data;
     },
 

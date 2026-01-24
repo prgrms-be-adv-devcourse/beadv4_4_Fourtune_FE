@@ -35,13 +35,17 @@ cp env.example .env
 ```ini
 # .env 파일 예시
 
-# 백엔드 서버 주소 (로컬 실행 시 보통 8080 포트)
-VITE_API_URL=http://localhost:8080
+# 백엔드 서버 주소
+# 로컬 개발 시(Proxy 사용): 비워두세요 (권장)
+# VITE_BACKEND_URL=
+
+# 배포 환경 또는 직접 연결 시: 주소 입력
+# VITE_BACKEND_URL=http://localhost:8080
 
 # Mock API 모드 사용 여부
 # true: 백엔드 서버 없이 프론트엔드 내부 가상 데이터 사용 (테스트용)
 # false: 실제 백엔드 API와 통신
-VITE_USE_MOCK=true
+VITE_USE_MOCK=false
 ```
 
 > **Tip**: 백엔드 서버가 아직 준비되지 않았거나 프론트엔드 UI 작업만 할 때는 `VITE_USE_MOCK=true`로 설정하세요.

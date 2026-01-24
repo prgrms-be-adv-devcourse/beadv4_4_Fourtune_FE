@@ -3,7 +3,7 @@ import { type ApiService } from './api.interface';
 
 // Use VITE_BACKEND_URL environment variable for backend server address
 // This keeps the backend URL secure and not exposed in the codebase
-const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080';
+const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
 const client = axios.create({
     baseURL: backendUrl,
     headers: {
@@ -28,6 +28,39 @@ export const realApi: ApiService = {
 
     getAuctionById: async (id: number) => {
         const response = await client.get(`/api/auctions/${id}`);
+        return response.data;
+    },
+
+    createAuction: async (data, images) => {
+        const formData = new FormData();
+
+        // Clean up data: convert empty buyNowPrice to undefined
+        const cleanedData = {
+            ...data,
+            buyNowPrice: data.buyNowPrice || undefined,
+            // Ensure datetime is in ISO 8601 format
+            startAt: new Date(data.startAt).toISOString(),
+            endAt: new Date(data.endAt).toISOString(),
+        };
+
+        // Add JSON data as a blob with proper content type
+        const requestBlob = new Blob([JSON.stringify(cleanedData)], {
+            type: 'application/json'
+        });
+        formData.append('request', requestBlob);
+
+        // Add image files if provided
+        if (images && images.length > 0) {
+            images.forEach((image) => {
+                formData.append('images', image);
+            });
+        }
+
+        const response = await client.post('/api/v1/auctions', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
         return response.data;
     },
 

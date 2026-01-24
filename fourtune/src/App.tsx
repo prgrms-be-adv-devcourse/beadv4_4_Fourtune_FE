@@ -5,6 +5,7 @@ import Signup from './pages/Auth/Signup';
 import AuctionList from './pages/AuctionList/AuctionList';
 import AuctionDetail from './pages/AuctionDetail/AuctionDetail';
 import MyPage from './pages/MyPage/MyPage.tsx';
+import CreateAuction from './pages/CreateAuction/CreateAuction';
 
 function App() {
     return (
@@ -13,6 +14,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             <Route path="/" element={<Layout />}>
                 <Route index element={<AuctionList />} />
+                <Route path="auctions/create" element={<CreateAuction />} />
                 <Route path="auctions/:id" element={<AuctionDetail />} />
                 <Route path="mypage" element={<MyPage />} />
             </Route>

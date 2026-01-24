@@ -60,6 +60,35 @@ export const mockApi: ApiService = {
         return item;
     },
 
+    createAuction: async (data, images) => {
+        await delay(800);
+
+        // Check authentication
+        if (!mockApi.isAuthenticated()) {
+            throw new Error('로그인이 필요합니다.');
+        }
+
+        // Create mock auction item
+        const newAuction = {
+            auctionItemId: Date.now(),
+            title: data.title,
+            description: data.description,
+            category: data.category,
+            status: 'SCHEDULED' as const,
+            startPrice: data.startPrice,
+            currentPrice: data.startPrice,
+            startAt: data.startAt,
+            endAt: data.endAt,
+            imageUrls: images ? images.map((_, i) => `https://picsum.photos/800/600?random=${Date.now() + i}`) : [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+        };
+
+        // In a real scenario, this would be added to the backend
+        // For mock, we'll just return it
+        return newAuction;
+    },
+
     // Mock Auth
     login: async (email: string) => {
         await delay(800);

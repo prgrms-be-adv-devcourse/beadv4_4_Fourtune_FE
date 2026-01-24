@@ -6,9 +6,6 @@ import { type ApiService } from './api.interface';
 const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
 const client = axios.create({
     baseURL: backendUrl,
-    headers: {
-        'Content-Type': 'application/json',
-    },
 });
 
 // Request interceptor to add token
@@ -34,20 +31,26 @@ export const realApi: ApiService = {
     createAuction: async (data, images) => {
         const formData = new FormData();
 
-        // Clean up data: convert empty buyNowPrice to undefined
-        const cleanedData = {
-            ...data,
+        // Clean up data and map fields to backend DTO
+
+        const payload = {
+            title: data.title,
+            description: data.description,
+            category: data.category,
+            startPrice: data.startPrice,
+            bidUnit: undefined, // Add if needed
             buyNowPrice: data.buyNowPrice || undefined,
-            // Ensure datetime is in ISO 8601 format
-            startAt: new Date(data.startAt).toISOString(),
-            endAt: new Date(data.endAt).toISOString(),
+            auctionStartTime: new Date(data.startAt).toISOString().split('.')[0],
+            auctionEndTime: new Date(data.endAt).toISOString().split('.')[0],
         };
 
+        console.log('Sending createAuction payload:', payload);
+
         // Add JSON data as a blob with proper content type
-        const requestBlob = new Blob([JSON.stringify(cleanedData)], {
+        const requestBlob = new Blob([JSON.stringify(payload)], {
             type: 'application/json'
         });
-        formData.append('request', requestBlob);
+        formData.append('request', requestBlob, 'request.json');
 
         // Add image files if provided
         if (images && images.length > 0) {
@@ -56,11 +59,7 @@ export const realApi: ApiService = {
             });
         }
 
-        const response = await client.post('/api/v1/auctions', formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await client.post('/api/v1/auctions', formData);
         return response.data;
     },
 

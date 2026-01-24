@@ -58,7 +58,23 @@ export const realApi: ApiService = {
 
     getAuctionById: async (id: number) => {
         const response = await client.get(`/api/v1/auctions/${id}`);
-        return response.data;
+        const data = response.data;
+
+        return {
+            auctionItemId: data.id,
+            title: data.title,
+            description: data.description,
+            category: data.category,
+            status: data.status,
+            startPrice: data.startPrice,
+            currentPrice: data.currentPrice,
+            startAt: data.auctionStartTime,
+            endAt: data.auctionEndTime,
+            imageUrls: data.imageUrls || [],
+            // These fields are not in the detail response but required by interface
+            createdAt: '',
+            updatedAt: '',
+        };
     },
 
     createAuction: async (data, images) => {

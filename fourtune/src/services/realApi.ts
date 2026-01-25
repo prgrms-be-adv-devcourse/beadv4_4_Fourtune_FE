@@ -154,6 +154,11 @@ export const realApi: ApiService = {
         return response.data.data; // ApiResponse.success(data) -> data
     },
 
+    getOrderByAuctionId: async (auctionId: number) => {
+        const response = await client.get(`/api/v1/orders/auction/${auctionId}`);
+        return response.data.data;
+    },
+
     confirmPayment: async (paymentKey: string, orderId: string, amount: number) => {
         await client.post('/api/payments/toss/confirm', {
             paymentKey,

@@ -33,6 +33,7 @@ export interface ApiService {
     // Payment & Order
     buyNow(auctionId: number): Promise<string>; // Returns orderId
     getPublicOrder(orderId: string): Promise<OrderDetailResponse>;
+    getOrderByAuctionId(auctionId: number): Promise<OrderDetailResponse>;
     confirmPayment(paymentKey: string, orderId: string, amount: number): Promise<void>;
     getMyOrders(): Promise<OrderResponse[]>;
 }

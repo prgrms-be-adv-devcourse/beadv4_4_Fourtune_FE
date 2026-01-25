@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
+import { type OrderDetailResponse } from '../../services/api.interface';
 import { type AuctionItem, AuctionStatus } from '../../types';
 import { AUCTION_STATUS_KO, AUCTION_CATEGORY_KO } from '../../constants/translations';
 import classes from './AuctionDetail.module.css';
@@ -13,14 +14,42 @@ const AuctionDetail: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<string>('');
     const [error, setError] = useState('');
     const [isWishlisted, setIsWishlisted] = useState(false);
+    // Order status check for Buy Now
+    const [myOrder, setMyOrder] = useState<OrderDetailResponse | null>(null);
 
     useEffect(() => {
         if (id) {
+            setLoading(true);
             api.getAuctionById(Number(id))
                 .then(data => {
                     setItem(data);
+
+                    // 1. Initial Image Setup
                     if (data.imageUrls && data.imageUrls.length > 0) {
                         setSelectedImage(data.imageUrls[0]);
+                    }
+
+                    // 2. Wishlist Check
+                    try {
+                        const saved = localStorage.getItem('wishlist');
+                        const wishlist = saved ? JSON.parse(saved) : [];
+                        setIsWishlisted(wishlist.includes(data.auctionItemId));
+                    } catch (e) {
+                        console.error('Failed to parse wishlist', e);
+                        setIsWishlisted(false);
+                    }
+
+                    // 3. Order Status Check (if SOLD_BY_BUY_NOW)
+                    if (data.status === AuctionStatus.SOLD_BY_BUY_NOW && api.isAuthenticated()) {
+                        api.getOrderByAuctionId(data.auctionItemId)
+                            .then((order: OrderDetailResponse) => {
+                                if (order && order.status === 'PENDING') {
+                                    setMyOrder(order);
+                                }
+                            })
+                            .catch(() => {
+                                setMyOrder(null);
+                            });
                     }
                 })
                 .catch(err => {
@@ -30,19 +59,6 @@ const AuctionDetail: React.FC = () => {
                 .finally(() => setLoading(false));
         }
     }, [id]);
-
-    useEffect(() => {
-        if (item) {
-            try {
-                const saved = localStorage.getItem('wishlist');
-                const wishlist = saved ? JSON.parse(saved) : [];
-                setIsWishlisted(wishlist.includes(item.auctionItemId));
-            } catch (e) {
-                console.error('Failed to parse wishlist', e);
-                setIsWishlisted(false);
-            }
-        }
-    }, [item]);
 
     const checkAuth = () => {
         if (!api.isAuthenticated()) {
@@ -114,6 +130,10 @@ const AuctionDetail: React.FC = () => {
     };
 
     const getStatusBadge = (status: AuctionStatus) => {
+        if (status === AuctionStatus.SOLD_BY_BUY_NOW && myOrder && myOrder.status === 'PENDING') {
+            return classes.badgeRunning; // Use green/active color for pending payment
+        }
+
         switch (status) {
             case AuctionStatus.ACTIVE: return classes.badgeRunning;
             case AuctionStatus.ENDED:
@@ -124,6 +144,13 @@ const AuctionDetail: React.FC = () => {
             case AuctionStatus.SCHEDULED: return classes.badgeReady;
             default: return classes.badgeClosed;
         }
+    };
+
+    const getStatusText = (status: AuctionStatus) => {
+        if (status === AuctionStatus.SOLD_BY_BUY_NOW && myOrder && myOrder.status === 'PENDING') {
+            return "결제 대기 (내 주문)";
+        }
+        return AUCTION_STATUS_KO[status];
     };
 
     if (loading) return <div className={classes.container} style={{ padding: '4rem 0', textAlign: 'center' }}>Loading...</div>;
@@ -154,7 +181,7 @@ const AuctionDetail: React.FC = () => {
 
                 {/* Right: Info */}
                 <div className={classes.infoSection}>
-                    <span className={`${classes.badge} ${getStatusBadge(item.status)}`}>{AUCTION_STATUS_KO[item.status]}</span>
+                    <span className={`${classes.badge} ${getStatusBadge(item.status)}`}>{getStatusText(item.status)}</span>
                     <h1 className={classes.title}>{item.title}</h1>
                     <div className={classes.category}>{AUCTION_CATEGORY_KO[item.category]}</div>
 
@@ -180,6 +207,15 @@ const AuctionDetail: React.FC = () => {
                                         즉시 구매
                                     </button>
                                 </>
+                            )}
+                            {item.status === AuctionStatus.SOLD_BY_BUY_NOW && myOrder && myOrder.status === 'PENDING' && (
+                                <button
+                                    onClick={() => navigate(`/payment?orderId=${myOrder.orderId}`)}
+                                    className={`btn btn-primary`}
+                                    style={{ width: '100%' }}
+                                >
+                                    결제하기 (주문 대기중)
+                                </button>
                             )}
                             <button
                                 onClick={toggleWishlist}

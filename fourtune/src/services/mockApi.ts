@@ -146,5 +146,10 @@ export const mockApi: ApiService = {
     confirmPayment: async (paymentKey: string, orderId: string, amount: number) => {
         await delay(1000);
         console.log(`[Mock] Payment Confirmed: ${paymentKey}, ${orderId}, ${amount}`);
+    },
+
+    getMyOrders: async () => {
+        await delay(500);
+        return [];
     }
 };

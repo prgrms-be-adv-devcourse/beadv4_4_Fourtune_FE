@@ -7,6 +7,9 @@ import AuctionList from './pages/AuctionList/AuctionList';
 import AuctionDetail from './pages/AuctionDetail/AuctionDetail';
 import MyPage from './pages/MyPage/MyPage.tsx';
 import CreateAuction from './pages/CreateAuction/CreateAuction';
+import Payment from './pages/Payment/Payment';
+import PaymentSuccess from './pages/Payment/PaymentSuccess';
+import PaymentFail from './pages/Payment/PaymentFail';
 
 function App() {
     return (
@@ -19,6 +22,9 @@ function App() {
                 <Route path="auctions/create" element={<CreateAuction />} />
                 <Route path="auctions/:id" element={<AuctionDetail />} />
                 <Route path="mypage" element={<MyPage />} />
+                <Route path="payment" element={<Payment />} />
+                <Route path="payment/success" element={<PaymentSuccess />} />
+                <Route path="payment/fail" element={<PaymentFail />} />
             </Route>
         </Routes>
     );

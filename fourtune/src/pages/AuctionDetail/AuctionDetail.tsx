@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 import { type AuctionItem, AuctionStatus } from '../../types';
 import { AUCTION_STATUS_KO, AUCTION_CATEGORY_KO } from '../../constants/translations';
@@ -7,6 +7,7 @@ import classes from './AuctionDetail.module.css';
 
 const AuctionDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
     const [item, setItem] = useState<AuctionItem | null>(null);
     const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState<string>('');
@@ -57,10 +58,35 @@ const AuctionDetail: React.FC = () => {
         alert(`Bid placed for ${item.title}! (Mock Action)`);
     };
 
-    const handleBuyNow = () => {
+    const handleBuyNow = async () => {
         if (!item) return;
         if (!checkAuth()) return;
-        alert(`Buy Now initiated for ${item.title}! (Mock Action)`);
+
+        try {
+            const orderId = await api.buyNow(item.auctionItemId);
+            navigate(`/payment?orderId=${orderId}`);
+        } catch (error: any) {
+            console.error('Buy now failed', error);
+
+            // Backend error code handling
+            // Assuming the backend returns standard error response: { code: 'AUCTION_006', message: '...' }
+            // Adjust property access based on actual error structure (e.g., error.response?.data?.code)
+            const errorCode = error.response?.data?.code;
+            const errorMessage = error.response?.data?.message;
+
+            if (errorCode === 'BN001') { // BUY_NOW_NOT_ENABLED
+                alert('즉시 구매가 불가능한 경매입니다.');
+            } else if (errorCode === 'BN002') { // BUY_NOW_PRICE_NOT_SET
+                alert('즉시 구매 가격이 설정되지 않았습니다.');
+            } else if (errorCode === 'BN003') { // AUCTION_NOT_ACTIVE
+                alert('진행 중인 경매가 아닙니다.');
+            } else if (errorCode === 'BN005') { // CANNOT_BUY_OWN_ITEM
+                alert('본인의 상품은 구매할 수 없습니다.');
+            } else {
+                // Should show backend message if available, or default
+                alert(errorMessage || '즉시 구매 요청에 실패했습니다. (알 수 없는 오류)');
+            }
+        }
     };
 
     const toggleWishlist = () => {
@@ -111,7 +137,7 @@ const AuctionDetail: React.FC = () => {
                 {/* Left: Images */}
                 <div className={classes.imageSection}>
                     <div className={classes.mainImageContainer}>
-                        <img src={selectedImage} alt={item.title} className={classes.mainImage} />
+                        {selectedImage && <img src={selectedImage} alt={item.title} className={classes.mainImage} />}
                     </div>
                     <div className={classes.thumbnailGrid}>
                         {item.imageUrls.map((url, idx) => (

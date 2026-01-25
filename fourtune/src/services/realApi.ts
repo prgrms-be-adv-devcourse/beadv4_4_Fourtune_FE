@@ -142,5 +142,23 @@ export const realApi: ApiService = {
     getCurrentUser: () => {
         const userStr = localStorage.getItem('user');
         return userStr ? JSON.parse(userStr) : null;
+    },
+
+    buyNow: async (auctionId: number) => {
+        const response = await client.post(`/api/v1/auctions/${auctionId}/buy-now`);
+        return response.data; // orderId string
+    },
+
+    getPublicOrder: async (orderId: string) => {
+        const response = await client.get(`/api/v1/orders/public/${orderId}`);
+        return response.data.data; // ApiResponse.success(data) -> data
+    },
+
+    confirmPayment: async (paymentKey: string, orderId: string, amount: number) => {
+        await client.post('/api/payments/toss/confirm', {
+            paymentKey,
+            orderId,
+            amount
+        });
     }
 };

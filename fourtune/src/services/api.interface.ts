@@ -29,4 +29,27 @@ export interface ApiService {
     logout(): void;
     isAuthenticated(): boolean;
     getCurrentUser(): { email: string; name: string } | null;
+
+    // Payment & Order
+    buyNow(auctionId: number): Promise<string>; // Returns orderId
+    getPublicOrder(orderId: string): Promise<OrderDetailResponse>;
+    confirmPayment(paymentKey: string, orderId: string, amount: number): Promise<void>;
+}
+
+export interface OrderDetailResponse {
+    id: number;
+    orderId: string;
+    auctionId: number;
+    auctionTitle: string;
+    thumbnailUrl: string;
+    winnerId: number;
+    winnerNickname?: string;
+    sellerId: number;
+    sellerNickname?: string;
+    finalPrice: number;
+    orderType: string;
+    status: string;
+    paymentKey?: string;
+    paidAt?: string;
+    createdAt: string;
 }

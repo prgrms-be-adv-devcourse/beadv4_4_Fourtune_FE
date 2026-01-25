@@ -1,6 +1,7 @@
 import { MOCK_AUCTIONS } from './mockData';
 import { type ApiService } from './api.interface';
 
+
 // Simulate network delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -156,5 +157,50 @@ export const mockApi: ApiService = {
     getMyOrders: async () => {
         await delay(500);
         return [];
+    },
+
+    // Mock Cart Implementation
+    getCart: async () => {
+        await delay(500);
+        return {
+            id: 1,
+            userId: 1,
+            totalItemCount: 0,
+            activeItemCount: 0,
+            totalPrice: 0,
+            items: []
+        };
+    },
+
+    getCartItemCount: async () => {
+        await delay(300);
+        return 0;
+    },
+
+    addItemToCart: async (_auctionId: number) => {
+        await delay(500);
+        console.log('Mock: Added to cart', _auctionId);
+    },
+
+    removeItemFromCart: async (_cartItemId: number) => {
+        await delay(500);
+        console.log('Mock: Removed from cart', _cartItemId);
+    },
+
+    buyNowFromCart: async (_cartItemIds: number[]) => {
+        await delay(1000);
+        console.log('Mock: Bought from cart', _cartItemIds);
+        return [`MOCK_ORDER_CART_${Date.now()}`];
+    },
+
+    buyNowAllCart: async () => {
+        await delay(1000);
+        console.log('Mock: Bought all from cart');
+        return [`MOCK_ORDER_CART_ALL_${Date.now()}`];
+    },
+
+    clearExpiredItems: async () => {
+        await delay(500);
+        console.log('Mock: Cleared expired items');
     }
 };

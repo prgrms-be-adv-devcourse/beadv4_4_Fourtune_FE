@@ -186,5 +186,38 @@ export const realApi: ApiService = {
     getMyOrders: async () => {
         const response = await client.get('/api/v1/orders/my');
         return response.data.data; // ApiResponse<List<OrderResponse>>
+    },
+
+    // Cart Implementation
+    getCart: async () => {
+        const response = await client.get('/api/v1/cart');
+        return response.data.data; // ApiResponse<CartResponse>
+    },
+
+    getCartItemCount: async () => {
+        const response = await client.get('/api/v1/cart/count');
+        return response.data.data; // ApiResponse<Integer>
+    },
+
+    addItemToCart: async (auctionId: number) => {
+        await client.post('/api/v1/cart/items', { auctionId });
+    },
+
+    removeItemFromCart: async (cartItemId: number) => {
+        await client.delete(`/api/v1/cart/items/${cartItemId}`);
+    },
+
+    buyNowFromCart: async (cartItemIds: number[]) => {
+        const response = await client.post('/api/v1/cart/buy-now', { cartItemIds });
+        return response.data.data; // ApiResponse<List<String>> (orderIds)
+    },
+
+    buyNowAllCart: async () => {
+        const response = await client.post('/api/v1/cart/buy-now/all');
+        return response.data.data; // ApiResponse<List<String>> (orderIds)
+    },
+
+    clearExpiredItems: async () => {
+        await client.delete('/api/v1/cart/expired');
     }
 };

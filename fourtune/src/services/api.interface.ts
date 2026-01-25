@@ -1,4 +1,10 @@
-import { type AuctionItem, type SearchResponse, AuctionCategory, AuctionStatus } from '../types';
+import {
+    type AuctionItem,
+    type SearchResponse,
+    AuctionCategory,
+    AuctionStatus,
+    type CartResponse,
+} from '../types';
 
 export interface CreateAuctionRequest {
     title: string;
@@ -10,6 +16,7 @@ export interface CreateAuctionRequest {
     endAt: string;   // ISO 8601 format
 }
 
+// Interface for API Service
 export interface ApiService {
     searchAuctions(params: {
         page?: number;
@@ -36,6 +43,15 @@ export interface ApiService {
     getOrderByAuctionId(auctionId: number): Promise<OrderDetailResponse>;
     confirmPayment(paymentKey: string, orderId: string, amount: number): Promise<void>;
     getMyOrders(): Promise<OrderResponse[]>;
+
+    // Cart
+    getCart(): Promise<CartResponse>;
+    getCartItemCount(): Promise<number>;
+    addItemToCart(auctionId: number): Promise<void>;
+    removeItemFromCart(cartItemId: number): Promise<void>;
+    buyNowFromCart(cartItemIds: number[]): Promise<string[]>; // Returns orderIds
+    buyNowAllCart(): Promise<string[]>; // Returns orderIds
+    clearExpiredItems(): Promise<void>;
 }
 
 export interface OrderDetailResponse {

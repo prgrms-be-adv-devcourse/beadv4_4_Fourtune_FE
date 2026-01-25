@@ -19,6 +19,7 @@ const AuctionDetail: React.FC = () => {
 
     useEffect(() => {
         if (id) {
+            // eslint-disable-next-line
             setLoading(true);
             api.getAuctionById(Number(id))
                 .then(data => {
@@ -102,6 +103,22 @@ const AuctionDetail: React.FC = () => {
                 // Should show backend message if available, or default
                 alert(errorMessage || '즉시 구매 요청에 실패했습니다. (알 수 없는 오류)');
             }
+        }
+    };
+
+    const handleAddToCart = async () => {
+        if (!item) return;
+        if (!checkAuth()) return;
+
+        try {
+            await api.addItemToCart(item.auctionItemId);
+            if (confirm('장바구니에 담겼습니다. 장바구니로 이동하시겠습니까?')) {
+                navigate('/cart');
+            }
+        } catch (error: any) {
+            console.error('Failed to add to cart', error);
+            const errorMessage = error.response?.data?.message || '장바구니 담기에 실패했습니다.';
+            alert(errorMessage);
         }
     };
 
@@ -205,6 +222,9 @@ const AuctionDetail: React.FC = () => {
                                     </button>
                                     <button onClick={handleBuyNow} className={`btn ${classes.buyNowButton}`}>
                                         즉시 구매
+                                    </button>
+                                    <button onClick={handleAddToCart} className={`btn btn-outline`} style={{ minWidth: '100px' }}>
+                                        장바구니
                                     </button>
                                 </>
                             )}

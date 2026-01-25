@@ -10,6 +10,7 @@ import CreateAuction from './pages/CreateAuction/CreateAuction';
 import Payment from './pages/Payment/Payment';
 import PaymentSuccess from './pages/Payment/PaymentSuccess';
 import PaymentFail from './pages/Payment/PaymentFail';
+import Cart from './pages/Cart/Cart';
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                 <Route path="auctions" element={<AuctionList />} />
                 <Route path="auctions/create" element={<CreateAuction />} />
                 <Route path="auctions/:id" element={<AuctionDetail />} />
+                <Route path="cart" element={<Cart />} />
                 <Route path="mypage" element={<MyPage />} />
                 <Route path="payment" element={<Payment />} />
                 <Route path="payment/success" element={<PaymentSuccess />} />

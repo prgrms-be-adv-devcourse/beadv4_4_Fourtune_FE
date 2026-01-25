@@ -48,3 +48,34 @@ export interface SearchResponse {
     size: number;
     totalPages: number;
 }
+
+// Cart Types
+export const CartItemStatus = {
+    ACTIVE: 'ACTIVE',
+    SOLD: 'SOLD',
+    EXPIRED: 'EXPIRED',
+    AUCTION_ENDED: 'AUCTION_ENDED'
+} as const;
+export type CartItemStatus = typeof CartItemStatus[keyof typeof CartItemStatus];
+
+export interface CartItemResponse {
+    id: number; // cartItemId
+    auctionId: number;
+    auctionTitle: string | null;
+    thumbnailUrl: string | null;
+    buyNowPriceWhenAdded: number;
+    currentBuyNowPrice: number | null;
+    auctionStatus: AuctionStatus | null;
+    status: CartItemStatus;
+    addedAt: string;
+    isPriceChanged: boolean;
+}
+
+export interface CartResponse {
+    id: number;
+    userId: number;
+    totalItemCount: number;
+    activeItemCount: number;
+    totalPrice: number;
+    items: CartItemResponse[];
+}

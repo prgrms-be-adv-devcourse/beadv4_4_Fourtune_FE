@@ -79,3 +79,38 @@ export interface CartResponse {
     totalPrice: number;
     items: CartItemResponse[];
 }
+
+// Bid Types
+export const BidStatus = {
+    ACTIVE: 'ACTIVE',
+    SUCCESS: 'SUCCESS',
+    FAILED: 'FAILED',
+    CANCELLED: 'CANCELLED'
+} as const;
+export type BidStatus = typeof BidStatus[keyof typeof BidStatus];
+
+export interface BidPlaceRequest {
+    auctionId: number;
+    bidAmount: number;
+}
+
+export interface BidResponse {
+    id: number;
+    auctionId: number;
+    bidderId: number;
+    bidderNickname?: string;
+    bidAmount: number;
+    status: BidStatus;
+    isWinning: boolean;
+    createdAt: string;
+}
+
+export interface BidDetailResponse extends BidResponse {
+    auctionTitle: string;
+    message?: string;
+}
+
+export interface BidHistoryResponse {
+    auctionId: number;
+    bids: BidResponse[];
+}

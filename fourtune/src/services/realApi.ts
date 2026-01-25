@@ -160,6 +160,22 @@ export const realApi: ApiService = {
         return userStr ? JSON.parse(userStr) : null;
     },
 
+    // Bidding Implementation
+    placeBid: async (auctionId: number, bidAmount: number) => {
+        const response = await client.post('/api/v1/bids', { auctionId, bidAmount });
+        return response.data.data; // ApiResponse<BidDetailResponse>
+    },
+
+    getMyBids: async () => {
+        const response = await client.get('/api/v1/bids/my');
+        return response.data.data; // ApiResponse<List<BidResponse>>
+    },
+
+    getAuctionBids: async (auctionId: number) => {
+        const response = await client.get(`/api/v1/bids/auction/${auctionId}`);
+        return response.data.data; // ApiResponse<BidHistoryResponse>
+    },
+
     buyNow: async (auctionId: number) => {
         const response = await client.post(`/api/v1/auctions/${auctionId}/buy-now`);
         return response.data; // orderId string

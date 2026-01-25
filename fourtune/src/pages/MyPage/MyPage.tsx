@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// Link imported with React hooks
 import { api } from '../../services/api';
 import { type AuctionItem } from '../../types';
 import { AuctionCard } from '../../components/features/AuctionCard';
@@ -12,6 +11,7 @@ const MyPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<Tab>('wishlist');
     const [wishlistItems, setWishlistItems] = useState<AuctionItem[]>([]);
     const [orders, setOrders] = useState<any[]>([]);
+    const [bids, setBids] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     // User Data
@@ -36,12 +36,13 @@ const MyPage: React.FC = () => {
         );
     }
 
-
     useEffect(() => {
         if (activeTab === 'wishlist') {
             fetchWishlist();
         } else if (activeTab === 'orders') {
             fetchOrders();
+        } else if (activeTab === 'bids') {
+            fetchBids();
         } else {
             setLoading(false);
         }
@@ -51,15 +52,18 @@ const MyPage: React.FC = () => {
         setLoading(true);
         const saved = localStorage.getItem('wishlist');
         if (saved) {
-            const ids: number[] = JSON.parse(saved);
             try {
+                const ids: number[] = JSON.parse(saved);
                 const promises = ids.map(id => api.getAuctionById(id).catch(() => null));
                 const results = await Promise.all(promises);
                 const validItems = results.filter((item): item is AuctionItem => item !== null);
                 setWishlistItems(validItems);
             } catch (error) {
                 console.error('Error fetching wishlist', error);
+                setWishlistItems([]);
             }
+        } else {
+            setWishlistItems([]);
         }
         setLoading(false);
     };
@@ -71,6 +75,18 @@ const MyPage: React.FC = () => {
             setOrders(data);
         } catch (error) {
             console.error('Error fetching orders', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchBids = async () => {
+        setLoading(true);
+        try {
+            const data = await api.getMyBids();
+            setBids(data);
+        } catch (error) {
+            console.error('Error fetching bids', error);
         } finally {
             setLoading(false);
         }
@@ -165,9 +181,54 @@ const MyPage: React.FC = () => {
         }
 
         if (activeTab === 'bids') {
+            if (loading) return <div>불러오는 중...</div>;
+            if (bids.length === 0) {
+                return (
+                    <div className={classes.emptyState}>
+                        <h3>참여 중인 입찰 내역이 없습니다.</h3>
+                    </div>
+                );
+            }
             return (
-                <div className={classes.emptyState}>
-                    <h3>참여 중인 입찰 내역이 없습니다.</h3>
+                <div className={classes.listContainer} style={{ display: 'block' }}>
+                    {bids.map((bid) => (
+                        <div key={bid.id} className={classes.orderCard} style={{
+                            border: '1px solid #eee',
+                            padding: '1.5rem',
+                            borderRadius: '8px',
+                            marginBottom: '1rem',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            backgroundColor: 'white'
+                        }}>
+                            <div>
+                                <div style={{ fontSize: '0.9rem', color: '#666', marginBottom: '0.5rem' }}>
+                                    {new Date(bid.createdAt).toLocaleDateString()} | 입찰번호 {bid.id}
+                                </div>
+                                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>
+                                    <Link to={`/auctions/${bid.auctionId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                        경매 상품 #{bid.auctionId} (바로가기)
+                                    </Link>
+                                </h3>
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <span style={{ fontWeight: 'bold' }}>입찰가: {bid.bidAmount.toLocaleString()}원</span>
+                                </div>
+                            </div>
+                            <div style={{ textAlign: 'right' }}>
+                                <div style={{
+                                    padding: '6px 12px',
+                                    borderRadius: '20px',
+                                    backgroundColor: bid.isWinning ? '#e6f4ea' : '#f5f5f5',
+                                    color: bid.isWinning ? '#1e7e34' : '#666',
+                                    fontSize: '0.9rem',
+                                    fontWeight: 500
+                                }}>
+                                    {bid.isWinning ? '현재 최고가' : '패찰 (상위 입찰 있음)'}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             );
         }

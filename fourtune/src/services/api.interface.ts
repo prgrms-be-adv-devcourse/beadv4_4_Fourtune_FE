@@ -4,6 +4,9 @@ import {
     AuctionCategory,
     AuctionStatus,
     type CartResponse,
+    type BidDetailResponse,
+    type BidResponse,
+    type BidHistoryResponse
 } from '../types';
 
 export interface CreateAuctionRequest {
@@ -36,6 +39,11 @@ export interface ApiService {
     logout(): void;
     isAuthenticated(): boolean;
     getCurrentUser(): { email: string; name: string } | null;
+
+    // Bidding
+    placeBid(auctionId: number, bidAmount: number): Promise<BidDetailResponse>;
+    getMyBids(): Promise<BidResponse[]>;
+    getAuctionBids(auctionId: number): Promise<BidHistoryResponse>;
 
     // Payment & Order
     buyNow(auctionId: number): Promise<string>; // Returns orderId

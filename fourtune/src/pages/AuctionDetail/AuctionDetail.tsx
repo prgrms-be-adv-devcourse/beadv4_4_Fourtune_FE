@@ -19,7 +19,6 @@ const AuctionDetail: React.FC = () => {
 
     useEffect(() => {
         if (id) {
-            // eslint-disable-next-line
             setLoading(true);
             api.getAuctionById(Number(id))
                 .then(data => {
@@ -69,10 +68,35 @@ const AuctionDetail: React.FC = () => {
         return true;
     };
 
-    const handleBid = () => {
+    const handleBid = async () => {
         if (!item) return;
         if (!checkAuth()) return;
-        alert(`Bid placed for ${item.title}! (Mock Action)`);
+
+        const bidAmountStr = prompt(`입찰하실 금액을 입력해주세요. (현재가: ${item.currentPrice.toLocaleString()}원)`);
+        if (!bidAmountStr) return;
+
+        const bidAmount = Number(bidAmountStr.replace(/,/g, ''));
+        if (isNaN(bidAmount)) {
+            alert('유효한 숫자를 입력해주세요.');
+            return;
+        }
+
+        if (bidAmount <= item.currentPrice) {
+            alert('입찰 금액은 현재가보다 높아야 합니다.');
+            return;
+        }
+
+        try {
+            const response = await api.placeBid(item.auctionItemId, bidAmount);
+            alert(response.message || '입찰에 성공했습니다!');
+            // Refresh item data
+            const updatedItem = await api.getAuctionById(item.auctionItemId);
+            setItem(updatedItem);
+        } catch (error: any) {
+            console.error('Bidding failed', error);
+            const errorMessage = error.response?.data?.message || '입찰에 실패했습니다.';
+            alert(errorMessage);
+        }
     };
 
     const handleBuyNow = async () => {
@@ -215,7 +239,7 @@ const AuctionDetail: React.FC = () => {
                         </div>
 
                         <div className={classes.actionButtons}>
-                            {item.status === AuctionStatus.ACTIVE && (
+                            {item.status === AuctionStatus.ACTIVE && new Date() <= new Date(item.endAt) && (
                                 <>
                                     <button onClick={handleBid} className={`btn btn-primary ${classes.bidButton}`}>
                                         입찰하기
@@ -227,6 +251,11 @@ const AuctionDetail: React.FC = () => {
                                         장바구니
                                     </button>
                                 </>
+                            )}
+                            {(item.status === AuctionStatus.ACTIVE && new Date() > new Date(item.endAt)) && (
+                                <button disabled className={`btn btn-outline`} style={{ width: '100%', cursor: 'not-allowed' }}>
+                                    경매 시간 종료 (마감됨)
+                                </button>
                             )}
                             {item.status === AuctionStatus.SOLD_BY_BUY_NOW && myOrder && myOrder.status === 'PENDING' && (
                                 <button

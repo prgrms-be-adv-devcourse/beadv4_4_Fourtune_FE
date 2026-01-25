@@ -119,6 +119,47 @@ export const mockApi: ApiService = {
         return userStr ? JSON.parse(userStr) : null;
     },
 
+    // Bidding Mock
+    placeBid: async (auctionId: number, bidAmount: number) => {
+        await delay(500);
+        // Find auction and update price
+        const auction = MOCK_AUCTIONS.find(a => a.auctionItemId === auctionId);
+        if (!auction) throw new Error("Auction not found");
+
+        if (bidAmount <= auction.currentPrice) {
+            throw new Error("입찰가는 현재가보다 높아야 합니다.");
+        }
+
+        auction.currentPrice = bidAmount; // Hacky update for mock
+
+        // Mock Response
+        return {
+            id: Date.now(),
+            auctionId: auctionId,
+            auctionTitle: auction.title,
+            bidderId: 1,
+            bidderNickname: "MockUser",
+            bidAmount: bidAmount,
+            status: "ACTIVE" as any,
+            isWinning: true,
+            createdAt: new Date().toISOString(),
+            message: "현재 최고 입찰자입니다."
+        };
+    },
+
+    getMyBids: async () => {
+        await delay(500);
+        return [];
+    },
+
+    getAuctionBids: async (auctionId: number) => {
+        await delay(500);
+        return {
+            auctionId,
+            bids: []
+        };
+    },
+
     // Mock Payment & Order
     buyNow: async (_auctionId: number) => {
         await delay(500);

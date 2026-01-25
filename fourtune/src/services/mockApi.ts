@@ -119,7 +119,7 @@ export const mockApi: ApiService = {
     },
 
     // Mock Payment & Order
-    buyNow: async (auctionId: number) => {
+    buyNow: async (_auctionId: number) => {
         await delay(500);
         return `MOCK_ORDER_${Date.now()}`;
     },

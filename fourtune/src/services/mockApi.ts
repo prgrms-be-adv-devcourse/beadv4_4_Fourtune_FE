@@ -116,5 +116,35 @@ export const mockApi: ApiService = {
     getCurrentUser: () => {
         const userStr = localStorage.getItem('user');
         return userStr ? JSON.parse(userStr) : null;
+    },
+
+    // Mock Payment & Order
+    buyNow: async (auctionId: number) => {
+        await delay(500);
+        return `MOCK_ORDER_${Date.now()}`;
+    },
+
+    getPublicOrder: async (orderId: string) => {
+        await delay(500);
+        return {
+            id: 12345,
+            orderId: orderId,
+            auctionId: 1,
+            auctionTitle: 'Mock Auction Item',
+            thumbnailUrl: 'https://picsum.photos/200/300',
+            winnerId: 100,
+            winnerNickname: 'MockWinner',
+            sellerId: 200,
+            sellerNickname: 'MockSeller',
+            finalPrice: 10000,
+            orderType: 'BUY_NOW',
+            status: 'PENDING',
+            createdAt: new Date().toISOString()
+        };
+    },
+
+    confirmPayment: async (paymentKey: string, orderId: string, amount: number) => {
+        await delay(1000);
+        console.log(`[Mock] Payment Confirmed: ${paymentKey}, ${orderId}, ${amount}`);
     }
 };

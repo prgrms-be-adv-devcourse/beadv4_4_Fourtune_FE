@@ -143,6 +143,11 @@ export const mockApi: ApiService = {
         };
     },
 
+    getOrderByAuctionId: async (_auctionId: number) => {
+        await delay(500);
+        throw new Error('Mock not implemented for getOrderByAuctionId');
+    },
+
     confirmPayment: async (paymentKey: string, orderId: string, amount: number) => {
         await delay(1000);
         console.log(`[Mock] Payment Confirmed: ${paymentKey}, ${orderId}, ${amount}`);

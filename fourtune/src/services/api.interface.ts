@@ -34,6 +34,7 @@ export interface ApiService {
     buyNow(auctionId: number): Promise<string>; // Returns orderId
     getPublicOrder(orderId: string): Promise<OrderDetailResponse>;
     confirmPayment(paymentKey: string, orderId: string, amount: number): Promise<void>;
+    getMyOrders(): Promise<OrderResponse[]>;
 }
 
 export interface OrderDetailResponse {
@@ -51,5 +52,18 @@ export interface OrderDetailResponse {
     status: string;
     paymentKey?: string;
     paidAt?: string;
+    createdAt: string;
+}
+
+export interface OrderResponse {
+    id: number;
+    orderId: string;
+    auctionId: number;
+    auctionTitle: string;
+    winnerId: number;
+    winnerNickname?: string;
+    finalPrice: number;
+    orderType: 'AUCTION_WIN' | 'BUY_NOW';
+    status: 'PENDING' | 'COMPLETED' | 'CANCELLED';
     createdAt: string;
 }

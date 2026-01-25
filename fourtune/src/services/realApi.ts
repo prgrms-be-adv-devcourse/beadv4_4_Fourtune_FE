@@ -160,5 +160,10 @@ export const realApi: ApiService = {
             orderId,
             amount
         });
+    },
+
+    getMyOrders: async () => {
+        const response = await client.get('/api/v1/orders/my');
+        return response.data.data; // ApiResponse<List<OrderResponse>>
     }
 };

@@ -6,11 +6,12 @@ import { type AuctionItem } from '../../types';
 import { AuctionCard } from '../../components/features/AuctionCard';
 import classes from './MyPage.module.css';
 
-type Tab = 'wishlist' | 'bids' | 'history';
+type Tab = 'wishlist' | 'bids' | 'orders' | 'history';
 
 const MyPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<Tab>('wishlist');
     const [wishlistItems, setWishlistItems] = useState<AuctionItem[]>([]);
+    const [orders, setOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     // User Data
@@ -39,6 +40,8 @@ const MyPage: React.FC = () => {
     useEffect(() => {
         if (activeTab === 'wishlist') {
             fetchWishlist();
+        } else if (activeTab === 'orders') {
+            fetchOrders();
         } else {
             setLoading(false);
         }
@@ -61,6 +64,18 @@ const MyPage: React.FC = () => {
         setLoading(false);
     };
 
+    const fetchOrders = async () => {
+        setLoading(true);
+        try {
+            const data = await api.getMyOrders();
+            setOrders(data);
+        } catch (error) {
+            console.error('Error fetching orders', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const renderContent = () => {
         if (activeTab === 'wishlist') {
             if (loading) return <div>불러오는 중...</div>;
@@ -76,6 +91,74 @@ const MyPage: React.FC = () => {
                 <div className={classes.grid}>
                     {wishlistItems.map(item => (
                         <AuctionCard key={item.auctionItemId} item={item} />
+                    ))}
+                </div>
+            );
+        }
+
+        if (activeTab === 'orders') {
+            if (loading) return <div>불러오는 중...</div>;
+            if (orders.length === 0) {
+                return (
+                    <div className={classes.emptyState}>
+                        <h3>구매 내역이 없습니다.</h3>
+                        <p>다양한 경매 상품에 참여해보세요!</p>
+                    </div>
+                );
+            }
+            return (
+                <div className={classes.listContainer} style={{ display: 'block' }}>
+                    {orders.map((order) => (
+                        <div key={order.orderId} className={classes.orderCard} style={{
+                            border: '1px solid #eee',
+                            padding: '1.5rem',
+                            borderRadius: '8px',
+                            marginBottom: '1rem',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            backgroundColor: 'white'
+                        }}>
+                            <div>
+                                <div style={{ fontSize: '0.9rem', color: '#666', marginBottom: '0.5rem' }}>
+                                    {new Date(order.createdAt).toLocaleDateString()} | 주문번호 {order.orderId}
+                                </div>
+                                <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>{order.auctionTitle}</h3>
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <span className={`${classes.badge} ${order.orderType === 'BUY_NOW' ? classes.badgeReady : classes.badgeRunning}`} style={{ fontSize: '0.8rem', padding: '4px 8px' }}>
+                                        {order.orderType === 'BUY_NOW' ? '즉시 구매' : '경매 낙찰'}
+                                    </span>
+                                    <span style={{ fontWeight: 'bold' }}>{order.finalPrice.toLocaleString()}원</span>
+                                </div>
+                            </div>
+                            <div style={{ textAlign: 'right' }}>
+                                <div style={{
+                                    padding: '6px 12px',
+                                    borderRadius: '20px',
+                                    backgroundColor: order.status === 'COMPLETED' ? '#e6f4ea' : '#fce8e6',
+                                    color: order.status === 'COMPLETED' ? '#1e7e34' : '#c53030',
+                                    fontSize: '0.9rem',
+                                    fontWeight: 500
+                                }}>
+                                    {order.status === 'COMPLETED' ? '결제 완료' : order.status === 'PENDING' ? '결제 대기' : '취소됨'}
+                                </div>
+                                {order.status === 'PENDING' && (
+                                    <Link
+                                        to={`/payment?orderId=${order.orderId}`}
+                                        className="btn btn-primary"
+                                        style={{
+                                            padding: '6px 12px',
+                                            fontSize: '0.9rem',
+                                            marginTop: '0.5rem',
+                                            display: 'inline-block',
+                                            textDecoration: 'none'
+                                        }}
+                                    >
+                                        결제하기
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
                     ))}
                 </div>
             );
@@ -114,6 +197,12 @@ const MyPage: React.FC = () => {
                         ❤️ 관심상품
                     </button>
                     <button
+                        className={`${classes.menuItem} ${activeTab === 'orders' ? classes.activeMenu : ''}`}
+                        onClick={() => setActiveTab('orders')}
+                    >
+                        📦 구매 내역
+                    </button>
+                    <button
                         className={`${classes.menuItem} ${activeTab === 'bids' ? classes.activeMenu : ''}`}
                         onClick={() => setActiveTab('bids')}
                     >
@@ -131,6 +220,7 @@ const MyPage: React.FC = () => {
             <main className={classes.content}>
                 <h2 className={classes.sectionTitle}>
                     {activeTab === 'wishlist' && '관심상품'}
+                    {activeTab === 'orders' && '구매 내역'}
                     {activeTab === 'bids' && '입찰 내역'}
                     {activeTab === 'history' && '활동 기록'}
                 </h2>

@@ -111,7 +111,23 @@ export const realApi: ApiService = {
         }
 
         const response = await client.post('/api/v1/auctions', formData);
-        return response.data;
+        const responseData = response.data;
+
+        // Map backend response to AuctionItem interface
+        return {
+            auctionItemId: responseData.id || responseData.auctionItemId,
+            title: responseData.title,
+            description: responseData.description,
+            category: responseData.category,
+            status: responseData.status || 'SCHEDULED',
+            startPrice: responseData.startPrice,
+            currentPrice: responseData.currentPrice || responseData.startPrice,
+            startAt: responseData.auctionStartTime || data.startAt,
+            endAt: responseData.auctionEndTime || data.endAt,
+            imageUrls: responseData.imageUrls || [],
+            createdAt: responseData.createdAt || new Date().toISOString(),
+            updatedAt: responseData.updatedAt || new Date().toISOString()
+        } as any;
     },
 
     login: async (email, password) => {

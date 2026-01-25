@@ -243,5 +243,74 @@ export const mockApi: ApiService = {
     clearExpiredItems: async () => {
         await delay(500);
         console.log('Mock: Cleared expired items');
+    },
+
+    // Mock Settlement
+    getSettlementHistory: async () => {
+        await delay(500);
+        return {
+            id: 101,
+            payeeId: 1,
+            payeeEmail: "user@example.com",
+            totalAmount: 150000,
+            settledAt: null, // Pending settlement
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            items: [
+                {
+                    itemId: 1001,
+                    eventType: "SALE",
+                    relTypeCode: "ORDER",
+                    relId: 55,
+                    amount: 150000,
+                    payerName: "BuyerUser",
+                    paymentDate: new Date().toISOString()
+                }
+            ]
+        };
+    },
+
+    getAllSettlements: async () => {
+        await delay(500);
+        return [
+            {
+                id: 100,
+                payeeId: 1,
+                payeeEmail: "user@example.com",
+                totalAmount: 50000,
+                settledAt: new Date(Date.now() - 86400000 * 7).toISOString(), // Settled 7 days ago
+                createdAt: new Date(Date.now() - 86400000 * 8).toISOString(),
+                updatedAt: new Date(Date.now() - 86400000 * 7).toISOString(),
+                items: [
+                    {
+                        itemId: 900,
+                        eventType: "SALE",
+                        relTypeCode: "ORDER",
+                        relId: 40,
+                        amount: 50000,
+                        payerName: "OldBuyer",
+                        paymentDate: new Date(Date.now() - 86400000 * 8).toISOString()
+                    }
+                ]
+            }
+        ];
+    },
+
+    getSettlementPendings: async () => {
+        await delay(500);
+        return [
+            {
+                id: 201,
+                settlementEventType: "SALE",
+                relTypeCode: "ORDER",
+                relId: 60,
+                paymentDate: new Date().toISOString(),
+                amount: 30000,
+                payerId: 2,
+                payerName: "CurrentBuyer",
+                payeeId: 1,
+                payeeName: "Test User"
+            }
+        ];
     }
 };

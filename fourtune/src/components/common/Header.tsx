@@ -26,6 +26,7 @@ export const Header: React.FC = () => {
                         </Link>
                     )}
                     <Link to="/cart">장바구니</Link>
+                    <Link to="/settlement">정산</Link>
                     <Link to="/mypage">마이페이지</Link>
                     {isAuthenticated ? (
                         <button onClick={handleLogout} className="btn btn-outline btn-sm">로그아웃</button>

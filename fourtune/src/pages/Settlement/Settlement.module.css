@@ -1,0 +1,129 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: var(--text-color);
+}
+
+.section {
+    margin-bottom: 3rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.sectionTitle {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.emptyState {
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 2rem;
+}
+
+/* Card Style for Summary */
+/* Card Style for Summary */
+.summaryCard {
+    background: #f0fff4;
+    /* Light green background */
+    color: #2c3e50;
+    padding: 2rem;
+    border-radius: 16px;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    border: 1px solid #c3e6cb;
+}
+
+.summaryLabel {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.summaryValue {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #155724;
+    /* Dark green */
+}
+
+/* Table Styles */
+.tableContainer {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 800px;
+}
+
+.table th {
+    text-align: left;
+    padding: 1rem;
+    border-bottom: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: middle;
+}
+
+.amount {
+    font-weight: 600;
+    color: #155724;
+    /* Dark green */
+    font-family: monospace;
+    font-size: 1.1rem;
+}
+
+.date {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.badge {
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: #e9ecef;
+    color: #495057;
+}
+
+.badgePending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.badgeSuccess {
+    background: #d4edda;
+    color: #155724;
+}
+
+/* Accordion/Detail Styles */
+.detailRow {
+    background-color: var(--bg-tertiary);
+}
+
+.detailContent {
+    padding: 1rem 2rem;
+}

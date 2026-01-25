@@ -11,6 +11,7 @@ import Payment from './pages/Payment/Payment';
 import PaymentSuccess from './pages/Payment/PaymentSuccess';
 import PaymentFail from './pages/Payment/PaymentFail';
 import Cart from './pages/Cart/Cart';
+import SettlementPage from './pages/Settlement/Settlement';
 
 function App() {
     return (
@@ -23,6 +24,7 @@ function App() {
                 <Route path="auctions/create" element={<CreateAuction />} />
                 <Route path="auctions/:id" element={<AuctionDetail />} />
                 <Route path="cart" element={<Cart />} />
+                <Route path="settlement" element={<SettlementPage />} />
                 <Route path="mypage" element={<MyPage />} />
                 <Route path="payment" element={<Payment />} />
                 <Route path="payment/success" element={<PaymentSuccess />} />

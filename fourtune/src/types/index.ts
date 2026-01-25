@@ -114,3 +114,38 @@ export interface BidHistoryResponse {
     auctionId: number;
     bids: BidResponse[];
 }
+
+export interface SettlementItem {
+    itemId: number;
+    eventType: string; // 'SALE', 'COMMISSION'
+    relTypeCode: string; // 'ORDER'
+    relId: number;
+    amount: number;
+    payerName?: string;
+    paymentDate: string;
+    items?: SettlementItem[];
+}
+
+export interface SettlementResponse {
+    id: number;
+    payeeId: number;
+    payeeEmail: string;
+    totalAmount: number;
+    settledAt: string | null;
+    createdAt: string;
+    updatedAt: string;
+    items: SettlementItem[];
+}
+
+export interface SettlementCandidatedItemDto {
+    id: number;
+    settlementEventType: string;
+    relTypeCode: string;
+    relId: number;
+    paymentDate: string;
+    amount: number;
+    payerId?: number;
+    payerName?: string;
+    payeeId?: number;
+    payeeName?: string;
+}

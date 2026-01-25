@@ -6,7 +6,9 @@ import {
     type CartResponse,
     type BidDetailResponse,
     type BidResponse,
-    type BidHistoryResponse
+    type BidHistoryResponse,
+    type SettlementResponse,
+    type SettlementCandidatedItemDto
 } from '../types';
 
 export interface CreateAuctionRequest {
@@ -60,6 +62,11 @@ export interface ApiService {
     buyNowFromCart(cartItemIds: number[]): Promise<string[]>; // Returns orderIds
     buyNowAllCart(): Promise<string[]>; // Returns orderIds
     clearExpiredItems(): Promise<void>;
+
+    // Settlement
+    getSettlementHistory(): Promise<SettlementResponse>;
+    getAllSettlements(): Promise<SettlementResponse[]>;
+    getSettlementPendings(): Promise<SettlementCandidatedItemDto[]>;
 }
 
 export interface OrderDetailResponse {

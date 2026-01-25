@@ -235,5 +235,21 @@ export const realApi: ApiService = {
 
     clearExpiredItems: async () => {
         await client.delete('/api/v1/cart/expired');
+    },
+
+    // Settlement Implementation
+    getSettlementHistory: async () => {
+        const response = await client.get('/api/settlements/latest');
+        return response.data.data; // ApiResponse<SettlementResponse>
+    },
+
+    getAllSettlements: async () => {
+        const response = await client.get('/api/settlements/history');
+        return response.data.data; // ApiResponse<List<SettlementResponse>>
+    },
+
+    getSettlementPendings: async () => {
+        const response = await client.get('/api/settlements/pendings');
+        return response.data.data; // ApiResponse<List<SettlementCandidatedItemDto>>
     }
 };

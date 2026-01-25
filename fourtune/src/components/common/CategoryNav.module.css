@@ -1,0 +1,52 @@
+.navContainer {
+    background-color: var(--color-bg-surface);
+    border-bottom: 1px solid var(--color-border);
+    overflow-x: auto;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+.navContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.navContent {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0 1rem;
+    height: 3.5rem;
+}
+
+.navLink {
+    color: var(--color-text-muted);
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s;
+    padding: 0.5rem 0;
+    position: relative;
+}
+
+.navLink:hover {
+    color: var(--color-primary);
+}
+
+.navLink.active {
+    color: var(--color-primary);
+    font-weight: 600;
+}
+
+.navLink.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    /* Align with container border */
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: var(--color-primary);
+}

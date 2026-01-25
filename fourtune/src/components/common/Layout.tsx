@@ -1,11 +1,13 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Header } from './Header';
+import { CategoryNav } from './CategoryNav';
 
 export const Layout: React.FC = () => {
     return (
         <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
             <Header />
+            <CategoryNav />
             <main style={{ flex: 1, padding: '2rem 0' }}>
                 <div className="container">
                     <Outlet />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { api } from '../../services/api';
 import { type AuctionItem, AuctionCategory, AuctionStatus } from '../../types';
 import { AuctionCard } from '../../components/features/AuctionCard';
@@ -10,6 +11,8 @@ const AuctionList: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+
+    const [searchParams] = useSearchParams();
 
     // Filters
     const [keyword, setKeyword] = useState('');
@@ -27,6 +30,20 @@ const AuctionList: React.FC = () => {
         }, 500);
         return () => clearTimeout(timer);
     }, [keyword]);
+
+    // Sync category from URL
+    useEffect(() => {
+        const categoryParam = searchParams.get('category');
+        if (categoryParam) {
+            // Validate if it is a valid category
+            if (Object.values(AuctionCategory).includes(categoryParam as AuctionCategory)) {
+                setCategory(categoryParam as AuctionCategory);
+            }
+        } else {
+            setCategory('');
+        }
+        setPage(0);
+    }, [searchParams]);
 
     useEffect(() => {
         fetchData();

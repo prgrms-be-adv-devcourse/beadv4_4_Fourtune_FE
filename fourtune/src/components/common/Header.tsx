@@ -19,7 +19,7 @@ export const Header: React.FC = () => {
                     CLOV4R
                 </Link>
                 <nav className={classes.nav}>
-                    <Link to="/" className={classes.navSearch}>둘러보기</Link>
+                    <Link to="/auctions" className={classes.navSearch}>둘러보기</Link>
                     {isAuthenticated && (
                         <Link to="/auctions/create" className="btn btn-primary btn-sm">
                             상품 등록

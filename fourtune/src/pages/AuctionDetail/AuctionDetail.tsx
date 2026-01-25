@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../../services/api';
 import { type AuctionItem, AuctionStatus } from '../../types';
+import { AUCTION_STATUS_KO, AUCTION_CATEGORY_KO } from '../../constants/translations';
 import classes from './AuctionDetail.module.css';
 
 const AuctionDetail: React.FC = () => {
@@ -127,9 +128,9 @@ const AuctionDetail: React.FC = () => {
 
                 {/* Right: Info */}
                 <div className={classes.infoSection}>
-                    <span className={`${classes.badge} ${getStatusBadge(item.status)}`}>{item.status}</span>
+                    <span className={`${classes.badge} ${getStatusBadge(item.status)}`}>{AUCTION_STATUS_KO[item.status]}</span>
                     <h1 className={classes.title}>{item.title}</h1>
-                    <div className={classes.category}>{item.category}</div>
+                    <div className={classes.category}>{AUCTION_CATEGORY_KO[item.category]}</div>
 
                     <div className={classes.priceBox}>
                         <div className={classes.priceRow}>

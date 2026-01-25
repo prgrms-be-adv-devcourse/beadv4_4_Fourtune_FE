@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { type AuctionItem, AuctionStatus } from '../../types';
+import { AUCTION_STATUS_KO, AUCTION_CATEGORY_KO } from '../../constants/translations';
 import classes from './AuctionCard.module.css';
 
 interface AuctionCardProps {
@@ -26,11 +27,11 @@ export const AuctionCard: React.FC<AuctionCardProps> = ({ item }) => {
             <div className={classes.imageContainer}>
                 <img src={item.imageUrls[0]} alt={item.title} className={classes.image} loading="lazy" />
                 <span className={`${classes.badge} ${getStatusBadge(item.status)}`}>
-                    {item.status}
+                    {AUCTION_STATUS_KO[item.status]}
                 </span>
             </div>
             <div className={classes.content}>
-                <div className={classes.category}>{item.category}</div>
+                <div className={classes.category}>{AUCTION_CATEGORY_KO[item.category]}</div>
                 <h3 className={classes.title}>{item.title}</h3>
                 <div className={classes.priceSection}>
                     <div className={classes.currentPriceLabel}>현재 입찰가</div>

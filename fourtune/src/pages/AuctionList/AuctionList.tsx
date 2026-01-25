@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import { type AuctionItem, AuctionCategory, AuctionStatus } from '../../types';
 import { AuctionCard } from '../../components/features/AuctionCard';
+import { AUCTION_STATUS_KO, AUCTION_CATEGORY_KO } from '../../constants/translations';
 import classes from './AuctionList.module.css';
 
 const AuctionList: React.FC = () => {
@@ -83,17 +84,18 @@ const AuctionList: React.FC = () => {
                 </div>
 
                 <div className={classes.filters}>
+
                     <select className={classes.select} value={category} onChange={handleCategoryChange}>
                         <option value="">모든 카테고리</option>
                         {Object.values(AuctionCategory).map(c => (
-                            <option key={c} value={c}>{c}</option>
+                            <option key={c} value={c}>{AUCTION_CATEGORY_KO[c]}</option>
                         ))}
                     </select>
 
                     <select className={classes.select} value={status} onChange={handleStatusChange}>
                         <option value="">모든 상태</option>
-                        {Object.values(AuctionStatus).map(s => (
-                            <option key={s} value={s}>{s}</option>
+                        {[AuctionStatus.SCHEDULED, AuctionStatus.ACTIVE, AuctionStatus.ENDED].map(s => (
+                            <option key={s} value={s}>{AUCTION_STATUS_KO[s]}</option>
                         ))}
                     </select>
 

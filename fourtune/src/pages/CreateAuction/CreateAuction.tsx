@@ -5,6 +5,7 @@ import classes from './CreateAuction.module.css';
 import { api } from '../../services/api';
 import { AuctionCategory } from '../../types';
 import type { CreateAuctionRequest } from '../../services/api.interface';
+import { AUCTION_CATEGORY_KO } from '../../constants/translations';
 
 const CreateAuction: React.FC = () => {
     const navigate = useNavigate();
@@ -157,14 +158,9 @@ const CreateAuction: React.FC = () => {
                             onChange={handleInputChange}
                             required
                         >
-                            <option value={AuctionCategory.ELECTRONICS}>전자제품</option>
-                            <option value={AuctionCategory.CLOTHING}>의류</option>
-                            <option value={AuctionCategory.POTTERY}>도자기</option>
-                            <option value={AuctionCategory.APPLIANCES}>가전제품</option>
-                            <option value={AuctionCategory.BEDDING}>침구</option>
-                            <option value={AuctionCategory.BOOKS}>도서</option>
-                            <option value={AuctionCategory.COLLECTIBLES}>수집품</option>
-                            <option value={AuctionCategory.ETC}>기타</option>
+                            {Object.values(AuctionCategory).map(c => (
+                                <option key={c} value={c}>{AUCTION_CATEGORY_KO[c]}</option>
+                            ))}
                         </select>
                     </div>
 

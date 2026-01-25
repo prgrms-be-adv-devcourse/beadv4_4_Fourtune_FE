@@ -19,14 +19,16 @@ client.interceptors.request.use((config) => {
 
 export const realApi: ApiService = {
     searchAuctions: async (params) => {
-        const queryParams = {
-            keyword: params.keyword,
-            categories: params.category, // Backend expects Set<String>, single value works as comma-separated or repeated param
-            statuses: params.status,
+        const queryParams: any = {
+            keyword: params.keyword || undefined,
+            searchPriceRange: undefined, // Add if needed
             sort: params.sort || 'LATEST',
-            page: (params.page || 0) + 1, // Frontend 0-based, Backend 1-based (assumed from typical Spring Pageable, verified in Controller default=1)
-            size: params.size || 10,
+            page: (params.page || 0) + 1,
+            size: params.size || 12,
         };
+
+        if (params.category && (params.category as string) !== '') queryParams.categories = params.category;
+        if (params.status && (params.status as string) !== '') queryParams.statuses = params.status;
 
         const response = await client.get('/api/v1/search/auction-items', { params: queryParams });
         const data = response.data; // SearchResultPage

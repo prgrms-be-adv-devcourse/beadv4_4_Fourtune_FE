@@ -20,16 +20,16 @@ export const Header: React.FC = () => {
                 </Link>
                 <nav className={classes.nav}>
                     <Link to="/auctions" className={classes.navSearch}>둘러보기</Link>
-                    {isAuthenticated && (
-                        <Link to="/auctions/create" className="btn btn-primary btn-sm">
-                            상품 등록
-                        </Link>
-                    )}
                     <Link to="/cart">장바구니</Link>
                     <Link to="/settlement">정산</Link>
                     <Link to="/mypage">마이페이지</Link>
                     {isAuthenticated ? (
-                        <button onClick={handleLogout} className="btn btn-outline btn-sm">로그아웃</button>
+                        <>
+                            <Link to="/auctions/create" className="btn btn-primary btn-sm">
+                                상품 등록
+                            </Link>
+                            <button onClick={handleLogout} className="btn btn-outline btn-sm">로그아웃</button>
+                        </>
                     ) : (
                         <div className={classes.authButtons}>
                             <Link to="/login" className="btn btn-outline">로그인</Link>

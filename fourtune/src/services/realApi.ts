@@ -91,8 +91,8 @@ export const realApi: ApiService = {
             startPrice: data.startPrice,
             bidUnit: undefined, // Add if needed
             buyNowPrice: data.buyNowPrice || undefined,
-            auctionStartTime: new Date(data.startAt).toISOString().split('.')[0],
-            auctionEndTime: new Date(data.endAt).toISOString().split('.')[0],
+            auctionStartTime: `${data.startAt}:00`,
+            auctionEndTime: `${data.endAt}:00`,
         };
 
         console.log('Sending createAuction payload:', payload);

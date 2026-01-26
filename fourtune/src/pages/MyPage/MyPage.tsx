@@ -4,6 +4,7 @@ import { api } from '../../services/api';
 import { type AuctionItem } from '../../types';
 import { AuctionCard } from '../../components/features/AuctionCard';
 import classes from './MyPage.module.css';
+import { LoginRequired } from '../../components/common/LoginRequired';
 
 type Tab = 'wishlist' | 'bids' | 'orders' | 'history';
 
@@ -21,18 +22,9 @@ const MyPage: React.FC = () => {
 
     if (!isAuthenticated) {
         return (
-            <div className={classes.container} style={{ justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-                <div style={{ textAlign: 'center' }}>
-                    <h2 style={{ marginBottom: '1rem' }}>로그인이 필요한 서비스입니다.</h2>
-                    <p style={{ marginBottom: '2rem', color: 'var(--color-text-muted)' }}>
-                        마이페이지를 이용하시려면 로그인이 필요합니다.
-                    </p>
-                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-                        <Link to="/login" className="btn btn-primary">로그인</Link>
-                        <Link to="/signup" className="btn btn-outline">회원가입</Link>
-                    </div>
-                </div>
-            </div>
+            <LoginRequired
+                message="마이페이지를 이용하시려면 로그인이 필요합니다."
+            />
         );
     }
 

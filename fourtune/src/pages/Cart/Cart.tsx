@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 // Force TS Recheck
 import { Link, useNavigate } from 'react-router-dom';
+import { LoginRequired } from '../../components/common/LoginRequired';
 import { api } from '../../services/api';
 import { type CartResponse, type CartItemResponse, CartItemStatus } from '../../types';
 import classes from './Cart.module.css';
@@ -11,6 +12,16 @@ const Cart: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
     const [processing, setProcessing] = useState(false);
+
+    const isAuthenticated = api.isAuthenticated();
+
+    if (!isAuthenticated) {
+        return (
+            <LoginRequired
+                message="장바구니를 이용하시려면 로그인이 필요합니다."
+            />
+        );
+    }
 
     useEffect(() => {
         loadCart();

@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+.content {
+    text-align: center;
+}
+
+.title {
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.message {
+    margin-bottom: 2rem;
+    color: var(--color-text-muted);
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}

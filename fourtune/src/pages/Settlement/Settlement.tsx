@@ -2,11 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import { type SettlementResponse, type SettlementCandidatedItemDto } from '../../types';
 import classes from './Settlement.module.css';
+import { LoginRequired } from '../../components/common/LoginRequired';
 
 const SettlementPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [history, setHistory] = useState<SettlementResponse[]>([]);
     const [pendings, setPendings] = useState<SettlementCandidatedItemDto[]>([]);
+
+    const isAuthenticated = api.isAuthenticated();
+
+    if (!isAuthenticated) {
+        return (
+            <LoginRequired
+                message="정산 내역을 확인하시려면 로그인이 필요합니다."
+            />
+        );
+    }
 
     useEffect(() => {
         loadData();
@@ -15,12 +26,6 @@ const SettlementPage: React.FC = () => {
     const loadData = async () => {
         setLoading(true);
         try {
-            // Check auth
-            if (!api.isAuthenticated()) {
-                window.location.href = '/login';
-                return;
-            }
-
             const [pendingData, historyData] = await Promise.all([
                 api.getSettlementPendings().catch(() => []),
                 api.getAllSettlements().catch(() => [])

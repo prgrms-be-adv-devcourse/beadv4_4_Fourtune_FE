@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 
+import classes from './PaymentResult.module.css';
+
 const PaymentFail: React.FC = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -8,24 +10,42 @@ const PaymentFail: React.FC = () => {
     const message = searchParams.get('message');
 
     return (
-        <div style={{ textAlign: 'center', padding: '4rem' }}>
-            <h1 style={{ color: '#e03131' }}>결제 실패</h1>
-            <p><strong>에러 코드:</strong> {code}</p>
-            <p><strong>사유:</strong> {message}</p>
-            <div style={{ marginTop: '2rem' }}>
-                <button
-                    onClick={() => navigate(-1)}
-                    style={{
-                        padding: '10px 20px',
-                        backgroundColor: '#333',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                    }}
-                >
-                    다시 시도하기
-                </button>
+        <div className={classes.container}>
+            <div className={classes.card}>
+                <div className={`${classes.iconWrapper} ${classes.iconFail}`}>
+                    !
+                </div>
+                <h1 className={classes.title}>결제 실패</h1>
+                <p className={classes.message}>
+                    결제 진행 중 오류가 발생했습니다.<br />
+                    다시 시도해 주세요.
+                </p>
+
+                <div className={classes.detailsBox} style={{ background: '#fef2f2', borderColor: '#fee2e2' }}>
+                    <div className={classes.detailRow}>
+                        <span className={classes.detailLabel}>에러 코드</span>
+                        <span className={classes.errorCode}>{code}</span>
+                    </div>
+                    <div className={classes.detailRow}>
+                        <span className={classes.detailLabel}>사유</span>
+                        <span className={classes.detailValue} style={{ color: '#b91c1c' }}>{message}</span>
+                    </div>
+                </div>
+
+                <div className={classes.buttonGroup}>
+                    <button
+                        className={classes.secondaryButton}
+                        onClick={() => navigate('/')}
+                    >
+                        취소
+                    </button>
+                    <button
+                        className={classes.primaryButton}
+                        onClick={() => navigate(-1)}
+                    >
+                        다시 시도
+                    </button>
+                </div>
             </div>
         </div>
     );

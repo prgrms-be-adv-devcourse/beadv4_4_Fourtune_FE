@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
 
+import classes from './PaymentResult.module.css';
+
 const PaymentSuccess: React.FC = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
@@ -18,7 +20,6 @@ const PaymentSuccess: React.FC = () => {
             return;
         }
 
-        // Confirm payment
         api.confirmPayment(paymentKey, orderId, Number(amount))
             .then(() => {
                 setStatus('success');
@@ -30,38 +31,69 @@ const PaymentSuccess: React.FC = () => {
     }, [searchParams, navigate]);
 
     if (status === 'loading') {
-        return <div style={{ textAlign: 'center', padding: '4rem' }}>결제 승인 처리 중입니다...</div>;
+        return (
+            <div className={classes.container}>
+                <div className={classes.card} style={{ maxWidth: '300px', padding: '2rem' }}>
+                    <div className="spinner-border text-primary" role="status" style={{ marginBottom: '1rem' }}></div>
+                    <p style={{ color: '#6b7280' }}>결제 승인 처리 중...</p>
+                </div>
+            </div>
+        );
     }
 
     if (status === 'fail') {
         return (
-            <div style={{ textAlign: 'center', padding: '4rem' }}>
-                <h2>결제 승인 실패</h2>
-                <p>결제는 완료되었으나 서버 승인 중 오류가 발생했습니다.</p>
-                <button onClick={() => navigate('/')}>홈으로 돌아가기</button>
+            <div className={classes.container}>
+                <div className={classes.card}>
+                    <div className={`${classes.iconWrapper} ${classes.iconFail}`}>
+                        ✕
+                    </div>
+                    <h2 className={classes.title}>결제 승인 실패</h2>
+                    <p className={classes.message}>결제는 완료되었으나 승인 과정에서 문제가 발생했습니다.</p>
+                    <button className={classes.primaryButton} onClick={() => navigate('/')}>
+                        홈으로 돌아가기
+                    </button>
+                </div>
             </div>
         );
     }
 
     return (
-        <div style={{ textAlign: 'center', padding: '4rem' }}>
-            <h1 style={{ color: '#2db400' }}>결제 완료!</h1>
-            <p><strong>주문번호:</strong> {searchParams.get('orderId')}</p>
-            <p><strong>결제금액:</strong> {Number(searchParams.get('amount')).toLocaleString()}원</p>
-            <div style={{ marginTop: '2rem' }}>
-                <button
-                    onClick={() => navigate('/')}
-                    style={{
-                        padding: '10px 20px',
-                        backgroundColor: '#333',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        cursor: 'pointer'
-                    }}
-                >
-                    홈으로 이동
-                </button>
+        <div className={classes.container}>
+            <div className={classes.card}>
+                <div className={`${classes.iconWrapper} ${classes.iconSuccess}`}>
+                    ✓
+                </div>
+                <h1 className={classes.title}>결제 완료!</h1>
+                <p className={classes.message}>주문이 성공적으로 처리되었습니다.</p>
+
+                <div className={classes.detailsBox}>
+                    <div className={classes.detailRow}>
+                        <span className={classes.detailLabel}>주문번호</span>
+                        <span className={classes.detailValue}>{searchParams.get('orderId')}</span>
+                    </div>
+                    <div className={classes.detailRow}>
+                        <span className={`${classes.detailLabel} ${classes.totalLabel}`}>결제금액</span>
+                        <span className={`${classes.detailValue} ${classes.totalValue}`}>
+                            {Number(searchParams.get('amount')).toLocaleString()}원
+                        </span>
+                    </div>
+                </div>
+
+                <div className={classes.buttonGroup}>
+                    <button
+                        className={classes.secondaryButton}
+                        onClick={() => navigate('/settlement')}
+                    >
+                        내역 보기
+                    </button>
+                    <button
+                        className={classes.primaryButton}
+                        onClick={() => navigate('/')}
+                    >
+                        홈으로
+                    </button>
+                </div>
             </div>
         </div>
     );

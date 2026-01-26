@@ -11,6 +11,12 @@ const SettlementPage: React.FC = () => {
 
     const isAuthenticated = api.isAuthenticated();
 
+    useEffect(() => {
+        if (isAuthenticated) {
+            loadData();
+        }
+    }, [isAuthenticated]);
+
     if (!isAuthenticated) {
         return (
             <LoginRequired
@@ -18,10 +24,6 @@ const SettlementPage: React.FC = () => {
             />
         );
     }
-
-    useEffect(() => {
-        loadData();
-    }, []);
 
     const loadData = async () => {
         setLoading(true);
@@ -55,8 +57,9 @@ const SettlementPage: React.FC = () => {
             <div className={classes.summaryCard}>
                 <div className={classes.summaryLabel}>총 정산 완료 금액</div>
                 <div className={classes.summaryValue}>{totalSettledAmount.toLocaleString()}원</div>
-                <div style={{ marginTop: '1rem', fontSize: '0.9rem', opacity: 0.8 }}>
-                    대기 중인 정산금: {pendings.reduce((sum, item) => sum + item.amount, 0).toLocaleString()}원
+                <div className={classes.summaryPending}>
+                    <span>대기 중인 정산금:</span>
+                    <strong>{pendings.reduce((sum, item) => sum + item.amount, 0).toLocaleString()}원</strong>
                 </div>
             </div>
 
@@ -101,7 +104,7 @@ const SettlementPage: React.FC = () => {
             <div className={classes.section}>
                 <div className={classes.sectionTitle}>
                     <span>정산 완료 내역</span>
-                    <span className={classes.badge + ' ' + classes.badgeSuccess} style={{ color: '#155724', background: '#d4edda' }}>{history.length}건</span>
+                    <span className={classes.badge + ' ' + classes.badgeSuccess}>{history.length}건</span>
                 </div>
 
                 {history.length === 0 ? (
@@ -129,7 +132,6 @@ const SettlementPage: React.FC = () => {
                                         <td className={classes.amount}>{settlement.totalAmount.toLocaleString()}원</td>
                                         <td>
                                             <button
-                                                className="btn btn-outline btn-sm"
                                                 onClick={() => alert('상세 보기 기능은 준비 중입니다.\n\n포함된 항목:\n' + settlement.items.map(i => `- ${i.relTypeCode} #${i.relId} (${i.amount.toLocaleString()}원)`).join('\n'))}
                                             >
                                                 상세보기

@@ -1,9 +1,32 @@
 import { MOCK_AUCTIONS } from './mockData';
 import { type ApiService } from './api.interface';
+import { AuctionStatus, CartItemStatus, type CartItemResponse } from '../types';
 
 
 // Simulate network delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+const MOCK_CART_KEY = 'mock_cart_v1';
+
+interface MockCartItem {
+    id: number; // cartItemId
+    auctionId: number;
+    buyNowPrice: number;
+    addedAt: string;
+}
+
+const getMockCartItems = (): MockCartItem[] => {
+    try {
+        const saved = localStorage.getItem(MOCK_CART_KEY);
+        return saved ? JSON.parse(saved) : [];
+    } catch {
+        return [];
+    }
+};
+
+const saveMockCartItems = (items: MockCartItem[]) => {
+    localStorage.setItem(MOCK_CART_KEY, JSON.stringify(items));
+};
 
 export const mockApi: ApiService = {
     searchAuctions: async (params) => {
@@ -140,7 +163,7 @@ export const mockApi: ApiService = {
             bidderId: 1,
             bidderNickname: "MockUser",
             bidAmount: bidAmount,
-            status: "ACTIVE" as any,
+            status: "ACTIVE" as const,
             isWinning: true,
             createdAt: new Date().toISOString(),
             message: "현재 최고 입찰자입니다."
@@ -161,7 +184,7 @@ export const mockApi: ApiService = {
     },
 
     // Mock Payment & Order
-    buyNow: async (_auctionId: number) => {
+    buyNow: async () => {
         await delay(500);
         return `MOCK_ORDER_${Date.now()}`;
     },
@@ -185,7 +208,7 @@ export const mockApi: ApiService = {
         };
     },
 
-    getOrderByAuctionId: async (_auctionId: number) => {
+    getOrderByAuctionId: async () => {
         await delay(500);
         throw new Error('Mock not implemented for getOrderByAuctionId');
     },
@@ -203,46 +226,105 @@ export const mockApi: ApiService = {
     // Mock Cart Implementation
     getCart: async () => {
         await delay(500);
+        const cartItems = getMockCartItems();
+        const responseItems: CartItemResponse[] = [];
+        let totalPrice = 0;
+
+        for (const item of cartItems) {
+            const auction = MOCK_AUCTIONS.find(a => a.auctionItemId === item.auctionId);
+            if (auction) {
+                // Determine status based on auction status
+                let status: CartItemStatus = CartItemStatus.ACTIVE;
+                if (auction.status === AuctionStatus.ENDED || auction.status === AuctionStatus.SOLD || auction.status === AuctionStatus.SOLD_BY_BUY_NOW) {
+                    status = CartItemStatus.AUCTION_ENDED;
+                }
+
+                responseItems.push({
+                    id: item.id,
+                    auctionId: auction.auctionItemId,
+                    auctionTitle: auction.title,
+                    thumbnailUrl: auction.imageUrls[0] || '',
+                    buyNowPriceWhenAdded: item.buyNowPrice,
+                    currentBuyNowPrice: auction.currentPrice, // Simplified
+                    auctionStatus: auction.status,
+                    status: status,
+                    addedAt: item.addedAt,
+                    isPriceChanged: false
+                });
+
+                if (status === 'ACTIVE') {
+                    totalPrice += item.buyNowPrice;
+                }
+            }
+        }
+
         return {
             id: 1,
             userId: 1,
-            totalItemCount: 0,
-            activeItemCount: 0,
-            totalPrice: 0,
-            items: []
+            totalItemCount: responseItems.length,
+            activeItemCount: responseItems.filter(i => i.status === 'ACTIVE').length,
+            totalPrice: totalPrice,
+            items: responseItems
         };
     },
 
     getCartItemCount: async () => {
         await delay(300);
-        return 0;
+        const cartItems = getMockCartItems();
+        return cartItems.length;
     },
 
-    addItemToCart: async (_auctionId: number) => {
+    addItemToCart: async (auctionId: number) => {
         await delay(500);
-        console.log('Mock: Added to cart', _auctionId);
+        const auction = MOCK_AUCTIONS.find(a => a.auctionItemId === auctionId);
+        if (!auction) throw new Error('Auction not found');
+
+        const items = getMockCartItems();
+        // Check duplicate
+        if (items.some(i => i.auctionId === auctionId)) {
+            throw new Error('이미 장바구니에 담긴 상품입니다.');
+        }
+
+        items.push({
+            id: Date.now(),
+            auctionId,
+            buyNowPrice: auction.currentPrice, // Using current price as buyNowPrice for mock
+            addedAt: new Date().toISOString()
+        });
+        saveMockCartItems(items);
+        console.log('Mock: Added to cart persited', auctionId);
     },
 
-    removeItemFromCart: async (_cartItemId: number) => {
+    removeItemFromCart: async (cartItemId: number) => {
         await delay(500);
-        console.log('Mock: Removed from cart', _cartItemId);
+        const items = getMockCartItems();
+        const filtered = items.filter(i => i.id !== cartItemId);
+        saveMockCartItems(filtered);
+        console.log('Mock: Removed from cart persisted', cartItemId);
     },
 
-    buyNowFromCart: async (_cartItemIds: number[]) => {
+    buyNowFromCart: async (cartItemIds: number[]) => {
         await delay(1000);
-        console.log('Mock: Bought from cart', _cartItemIds);
-        return [`MOCK_ORDER_CART_${Date.now()}`];
+        console.log('Mock: Bought from cart', cartItemIds);
+        // Remove bought items
+        const items = getMockCartItems();
+        const filtered = items.filter(i => !cartItemIds.includes(i.id));
+        saveMockCartItems(filtered);
+
+        return cartItemIds.map(id => `MOCK_ORDER_CART_${id}_${Date.now()}`);
     },
 
     buyNowAllCart: async () => {
         await delay(1000);
+        // Assume empty cart after buy all
+        saveMockCartItems([]);
         console.log('Mock: Bought all from cart');
         return [`MOCK_ORDER_CART_ALL_${Date.now()}`];
     },
 
     clearExpiredItems: async () => {
         await delay(500);
-        console.log('Mock: Cleared expired items');
+        console.log('Mock: Cleared expired items (No-op for simplicity)');
     },
 
     // Mock Settlement

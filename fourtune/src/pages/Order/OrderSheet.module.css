@@ -1,101 +1,302 @@
+/* Global Layout */
+.pageBackground {
+    background-color: #f8f9fa;
+    /* Light grey background for contrast */
+    min-height: calc(100vh - 80px);
+    /* Adjust based on header height */
+    padding: 40px 20px;
+}
+
 .container {
-    max-width: 800px;
-    margin: 40px auto;
-    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
 }
 
-.title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #333;
-    padding-bottom: 10px;
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #222;
 }
 
-.section {
-    margin-bottom: 30px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.pageTitle {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111;
+    margin: 0;
 }
 
-.sectionTitle {
+.orderId {
+    font-size: 14px;
+    color: #888;
+    font-family: monospace;
+}
+
+/* Grid System */
+.contentGrid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .contentGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Card Common Styles */
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    margin-bottom: 24px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.cardTitle {
     font-size: 18px;
     font-weight: 600;
-    margin-bottom: 15px;
     color: #333;
+    margin-bottom: 20px;
 }
 
-.productInfo {
+/* Product Section */
+.productItem {
     display: flex;
     gap: 20px;
-    align-items: center;
 }
 
-.thumbnail {
+.imageWrapper {
     width: 100px;
     height: 100px;
-    object-fit: cover;
-    border-radius: 4px;
-    background-color: #f0f0f0;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f1f1f1;
+    flex-shrink: 0;
 }
 
-.details {
+.productImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.productDetails {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    justify-content: center;
 }
 
-.productName {
-    font-size: 16px;
+.productTitle {
+    font-size: 18px;
+    font-weight: 500;
+    color: #111;
+    margin-bottom: 12px;
+}
+
+.priceRow,
+.sellerRow {
+    display: flex;
+    gap: 8px;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+}
+
+.label {
+    min-width: 60px;
+    color: #888;
+}
+
+/* Info Section */
+.infoGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.infoItem {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 12px;
+}
+
+.infoItem:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.infoLabel {
+    color: #888;
+    font-size: 14px;
+}
+
+.infoValue {
+    color: #333;
     font-weight: 500;
 }
 
-.productPrice {
-    font-size: 18px;
-    font-weight: bold;
-    color: #e53935;
+/* Payment Summary Card */
+.paymentCard {
+    position: sticky;
+    top: 40px;
+    border: 1px solid #eee;
 }
 
-.infoRow {
+.summaryRow {
     display: flex;
     justify-content: space-between;
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+    margin-bottom: 12px;
+    font-size: 15px;
+    color: #555;
 }
 
-.infoRow:last-child {
-    border-bottom: none;
+.divider {
+    height: 1px;
+    background-color: #eee;
+    margin: 16px 0;
+}
+
+.totalRow {
+    align-items: center;
+    margin-bottom: 24px;
+    color: #111;
+}
+
+.totalRow span:first-child {
+    font-weight: 600;
 }
 
 .totalPrice {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 18px;
-}
-
-.priceHighlight {
     font-size: 24px;
-    font-weight: bold;
+    font-weight: 800;
     color: #e53935;
+    /* Primary Action Color */
 }
 
+/* Payment Methods */
+.paymentMethods {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.method {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.method.active {
+    border-color: #111;
+    background-color: #111;
+    color: #fff;
+}
+
+/* Buttons */
 .payButton {
     width: 100%;
     padding: 18px;
-    background-color: #262626;
-    /* Dark theme compatible */
+    background: linear-gradient(135deg, #111 0%, #333 100%);
     color: white;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 700;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .payButton:hover {
-    background-color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.payButton:active {
+    transform: translateY(0);
+}
+
+.terms {
+    margin-top: 16px;
+    font-size: 12px;
+    color: #999;
+    text-align: center;
+    line-height: 1.4;
+}
+
+/* Loading & Error States */
+.loadingContainer,
+.errorContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    color: #666;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #eee;
+    border-top-color: #111;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.errorIcon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ffebee;
+    color: #c62828;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 16px;
+}
+
+.errorMessage {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 24px;
+}
+
+.backButton {
+    padding: 10px 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
 }

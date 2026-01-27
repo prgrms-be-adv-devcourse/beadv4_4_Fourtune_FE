@@ -254,7 +254,32 @@ export const mockApi: ApiService = {
 
     getMyOrders: async () => {
         await delay(500);
-        return [];
+        return [
+            {
+                id: 1,
+                orderId: 'ORDER_MOCK_001',
+                auctionId: 1,
+                auctionTitle: 'Vintage Camera',
+                winnerId: 100,
+                winnerNickname: 'Me',
+                finalPrice: 150000,
+                orderType: 'AUCTION_WIN',
+                status: 'PENDING', // Payment pending
+                createdAt: new Date(Date.now() - 86400000).toISOString()
+            },
+            {
+                id: 2,
+                orderId: 'ORDER_MOCK_002',
+                auctionId: 2,
+                auctionTitle: 'Gaming Laptop',
+                winnerId: 100,
+                winnerNickname: 'Me',
+                finalPrice: 1200000,
+                orderType: 'BUY_NOW',
+                status: 'COMPLETED', // Paid
+                createdAt: new Date(Date.now() - 86400000 * 3).toISOString()
+            }
+        ];
     },
 
     // Mock Cart Implementation

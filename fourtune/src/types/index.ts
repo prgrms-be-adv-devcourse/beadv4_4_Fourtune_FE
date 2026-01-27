@@ -40,6 +40,7 @@ export interface AuctionItem {
     imageUrls: string[];
     createdAt: string;
     updatedAt: string;
+    sellerName?: string;
 }
 
 export interface SearchResponse {

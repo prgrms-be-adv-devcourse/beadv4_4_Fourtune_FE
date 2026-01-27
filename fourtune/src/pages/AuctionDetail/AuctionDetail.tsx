@@ -291,6 +291,10 @@ const AuctionDetail: React.FC = () => {
                             <span>#{item.auctionItemId}</span>
                         </div>
                         <div className={classes.metaRow}>
+                            <span>판매자:</span>
+                            <span>{item.sellerName || '알 수 없음'}</span>
+                        </div>
+                        <div className={classes.metaRow}>
                             <span>시작 일시:</span>
                             <span>{new Date(item.startAt).toLocaleString()}</span>
                         </div>

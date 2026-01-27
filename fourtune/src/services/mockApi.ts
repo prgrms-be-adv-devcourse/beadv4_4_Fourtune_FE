@@ -106,6 +106,7 @@ export const mockApi: ApiService = {
             imageUrls: images ? images.map((_, i) => `https://picsum.photos/800/600?random=${Date.now() + i}`) : [],
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
+            sellerName: mockApi.getCurrentUser()?.name || 'Me',
         };
 
         // In a real scenario, this would be added to the backend
@@ -208,9 +209,42 @@ export const mockApi: ApiService = {
         };
     },
 
-    getOrderByAuctionId: async () => {
+    getOrderByAuctionId: async (auctionId: number) => {
         await delay(500);
-        throw new Error('Mock not implemented for getOrderByAuctionId');
+        return {
+            id: 12345,
+            orderId: `ORDER_${auctionId}`,
+            auctionId: auctionId,
+            auctionTitle: 'Mock Auction Item',
+            thumbnailUrl: 'https://picsum.photos/200/300',
+            winnerId: 100,
+            winnerNickname: 'MockWinner',
+            sellerId: 200,
+            sellerNickname: 'MockSeller',
+            finalPrice: 10000,
+            orderType: 'AUCTION_WIN',
+            status: 'PENDING',
+            createdAt: new Date().toISOString()
+        };
+    },
+
+    getOrderById: async (orderId: string) => {
+        await delay(500);
+        return {
+            id: 12345,
+            orderId: orderId,
+            auctionId: 1,
+            auctionTitle: 'Mock Auction Item',
+            thumbnailUrl: 'https://picsum.photos/200/300',
+            winnerId: 100,
+            winnerNickname: 'MockWinner',
+            sellerId: 200,
+            sellerNickname: 'MockSeller',
+            finalPrice: 10000,
+            orderType: 'BUY_NOW',
+            status: 'PENDING',
+            createdAt: new Date().toISOString()
+        };
     },
 
     confirmPayment: async (paymentKey: string, orderId: string, amount: number) => {

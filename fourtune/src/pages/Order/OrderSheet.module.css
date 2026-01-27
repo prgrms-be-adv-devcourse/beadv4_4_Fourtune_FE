@@ -1,9 +1,8 @@
 /* Global Layout */
 .pageBackground {
-    background-color: #f8f9fa;
-    /* Light grey background for contrast */
+    background-color: #f7f9f8;
+    /* Very subtle green-tinted off-white for premium feel */
     min-height: calc(100vh - 80px);
-    /* Adjust based on header height */
     padding: 40px 20px;
 }
 
@@ -19,19 +18,20 @@
     align-items: flex-end;
     margin-bottom: 24px;
     padding-bottom: 16px;
-    border-bottom: 2px solid #222;
+    border-bottom: 2px solid #1b4d3e;
+    /* Premium Deep Green */
 }
 
 .pageTitle {
     font-size: 28px;
     font-weight: 700;
-    color: #111;
+    color: #000;
     margin: 0;
 }
 
 .orderId {
     font-size: 14px;
-    color: #888;
+    color: #6c757d;
     font-family: monospace;
 }
 
@@ -50,23 +50,37 @@
 
 /* Card Common Styles */
 .card {
-    background: #fff;
+    background: #ffffff;
     border-radius: 12px;
     padding: 24px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 20px rgba(27, 77, 62, 0.04);
+    /* Subtle green shadow */
     margin-bottom: 24px;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #eef2f0;
 }
 
 .card:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 6px 20px rgba(27, 77, 62, 0.08);
 }
 
 .cardTitle {
     font-size: 18px;
     font-weight: 600;
-    color: #333;
+    color: #111;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.cardTitle::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background-color: #1b4d3e;
+    margin-right: 10px;
+    border-radius: 2px;
 }
 
 /* Product Section */
@@ -100,7 +114,7 @@
 .productTitle {
     font-size: 18px;
     font-weight: 500;
-    color: #111;
+    color: #333;
     margin-bottom: 12px;
 }
 
@@ -128,7 +142,7 @@
 .infoItem {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px solid #f1f1f1;
+    border-bottom: 1px solid #f5f7f6;
     padding-bottom: 12px;
 }
 
@@ -151,7 +165,8 @@
 .paymentCard {
     position: sticky;
     top: 40px;
-    border: 1px solid #eee;
+    border: 1px solid #e0e8e5;
+    background-color: #ffffff;
 }
 
 .summaryRow {
@@ -164,7 +179,7 @@
 
 .divider {
     height: 1px;
-    background-color: #eee;
+    background-color: #e0e8e5;
     margin: 16px 0;
 }
 
@@ -175,14 +190,14 @@
 }
 
 .totalRow span:first-child {
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .totalPrice {
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 800;
-    color: #e53935;
-    /* Primary Action Color */
+    color: #1b4d3e;
+    /* Green Price */
 }
 
 /* Payment Methods */
@@ -194,7 +209,7 @@
 }
 
 .method {
-    border: 1px solid #ddd;
+    border: 1px solid #d4e0dc;
     border-radius: 8px;
     padding: 12px;
     text-align: center;
@@ -206,19 +221,23 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    background-color: #f9fbfb;
 }
 
 .method.active {
-    border-color: #111;
-    background-color: #111;
-    color: #fff;
+    border-color: #1b4d3e;
+    background-color: #e8f5e9;
+    /* Light Green */
+    color: #1b4d3e;
+    font-weight: 700;
 }
 
 /* Buttons */
 .payButton {
     width: 100%;
     padding: 18px;
-    background: linear-gradient(135deg, #111 0%, #333 100%);
+    background: linear-gradient(135deg, #1b4d3e 0%, #143a2f 100%);
+    /* Green Gradient */
     color: white;
     font-size: 18px;
     font-weight: 700;
@@ -226,12 +245,13 @@
     border-radius: 8px;
     cursor: pointer;
     transition: transform 0.1s, box-shadow 0.2s;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(27, 77, 62, 0.2);
 }
 
 .payButton:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 14px rgba(27, 77, 62, 0.3);
+    background: linear-gradient(135deg, #1f5746 0%, #1b4d3e 100%);
 }
 
 .payButton:active {
@@ -260,8 +280,8 @@
 .spinner {
     width: 40px;
     height: 40px;
-    border: 3px solid #eee;
-    border-top-color: #111;
+    border: 3px solid #e0e8e5;
+    border-top-color: #1b4d3e;
     border-radius: 50%;
     animation: spin 1s linear infinite;
     margin-bottom: 16px;

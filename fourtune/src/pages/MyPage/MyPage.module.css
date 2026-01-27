@@ -1,107 +1,282 @@
+/* Layout */
 .container {
     max-width: 1200px;
-    margin: 2rem auto;
-    padding: 0 1.5rem;
+    margin: 40px auto;
+    padding: 0 20px;
     display: flex;
-    gap: 2rem;
-    min-height: 80vh;
+    gap: 40px;
+    min-height: calc(100vh - 100px);
 }
 
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+}
+
+/* Sidebar */
 .sidebar {
-    width: 250px;
-    background: var(--color-bg-surface);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border);
-    padding: 1.5rem;
-    height: fit-content;
+    width: 280px;
     flex-shrink: 0;
 }
 
-.profileInfo {
+.profileCard {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 30px 20px;
     text-align: center;
-    margin-bottom: 2rem;
-    padding-bottom: 1.5rem;
-    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    margin-bottom: 24px;
+    border: 1px solid #ecf0f1;
 }
 
 .avatar {
     width: 80px;
     height: 80px;
-    background: var(--color-bg-surface-hover);
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    /* Greenish gradient */
     border-radius: 50%;
-    margin: 0 auto 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: 32px;
 }
 
 .username {
-    font-size: 1.25rem;
+    font-size: 20px;
     font-weight: 700;
-    margin-bottom: 0.25rem;
+    color: #111;
+    margin-bottom: 4px;
 }
 
 .email {
-    color: var(--color-text-muted);
-    font-size: 0.875rem;
+    font-size: 14px;
+    color: #7f8c8d;
 }
 
 .menu {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid #ecf0f1;
 }
 
 .menuItem {
-    padding: 0.75rem 1rem;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    font-weight: 500;
-    color: var(--color-text-muted);
-    transition: all 0.2s;
+    width: 100%;
+    padding: 16px 24px;
+    border: none;
+    background: transparent;
     text-align: left;
+    font-size: 16px;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s;
+    border-bottom: 1px solid #f9f9f9;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.menuItem:last-child {
+    border-bottom: none;
 }
 
 .menuItem:hover {
-    background: var(--color-bg-surface-hover);
-    color: var(--color-text-main);
+    background-color: #f1f8f6;
+    /* Very light green tint */
+    color: #1b4d3e;
+    padding-left: 28px;
 }
 
 .activeMenu {
-    background: var(--color-primary);
-    color: white;
+    background-color: #e8f5e9;
+    /* Light Green */
+    color: #1b4d3e;
+    font-weight: 700;
+    border-left: 4px solid #1b4d3e;
 }
 
-.activeMenu:hover {
-    background: var(--color-primary-hover);
-    color: white;
-}
-
+/* Content Area */
 .content {
     flex: 1;
-    background: var(--color-bg-surface);
-    border-radius: var(--radius-lg);
-    border: 1px solid var(--color-border);
-    padding: 2rem;
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    border: 1px solid #ecf0f1;
+}
+
+.sectionHeader {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #1b4d3e;
 }
 
 .sectionTitle {
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--color-border);
+    font-size: 24px;
+    font-weight: 800;
+    color: #111;
+    /* User requested black for titles */
+    margin: 0;
 }
 
-/* Reusing grid layout */
+/* Grid for Items */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5rem;
+    gap: 24px;
+}
+
+/* Order/Bid Card Styles */
+.cardList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.card {
+    border: 1px solid #eef2f0;
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.2s;
+    background: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    box-shadow: 0 8px 24px rgba(27, 77, 62, 0.08);
+    transform: translateY(-2px);
+    border-color: #d4e0dc;
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+}
+
+.dateId {
+    font-size: 13px;
+    color: #888;
+    font-weight: 500;
+    font-family: 'Roboto Mono', monospace;
+}
+
+.cardTitle {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 12px 0;
+    color: #111;
+}
+
+.cardTitle a {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.cardTitle a:hover {
+    color: #1b4d3e;
+    text-decoration: underline;
+}
+
+.cardBody {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.priceInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.priceLabel {
+    font-size: 12px;
+    color: #888;
+}
+
+.priceValue {
+    font-size: 20px;
+    font-weight: 800;
+    color: #1b4d3e;
+}
+
+.statusContainer {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-end;
+}
+
+/* Status Badges */
+.badge {
+    padding: 6px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badgeType {
+    background-color: #f5f7fa;
+    color: #5f6368;
+    margin-right: 8px;
+}
+
+.badgeSuccess {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+.badgeWarning {
+    background-color: #fff9db;
+    color: #e67700;
+    border: 1px solid #ffe066;
+}
+
+.badgeDanger {
+    background-color: #fff5f5;
+    color: #fa5252;
+}
+
+/* Buttons */
+.actionBtn {
+    padding: 10px 20px;
+    background-color: #1b4d3e;
+    color: #fff;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background 0.2s;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.actionBtn:hover {
+    background-color: #143a2f;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .emptyState {
     text-align: center;
-    padding: 4rem;
-    color: var(--color-text-muted);
+    padding: 80px 0;
+    color: #888;
+}
+
+.emptyIcon {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.3;
 }

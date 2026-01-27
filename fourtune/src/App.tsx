@@ -11,6 +11,7 @@ import Payment from './pages/Payment/Payment';
 import PaymentSuccess from './pages/Payment/PaymentSuccess';
 import PaymentFail from './pages/Payment/PaymentFail';
 import Cart from './pages/Cart/Cart';
+import OrderSheet from './pages/Order/OrderSheet';
 import SettlementPage from './pages/Settlement/Settlement';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
                 <Route path="payment" element={<Payment />} />
                 <Route path="payment/success" element={<PaymentSuccess />} />
                 <Route path="payment/fail" element={<PaymentFail />} />
+                <Route path="order/:orderId" element={<OrderSheet />} />
             </Route>
         </Routes>
     );

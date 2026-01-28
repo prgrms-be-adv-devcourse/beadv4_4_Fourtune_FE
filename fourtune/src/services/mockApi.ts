@@ -173,7 +173,24 @@ export const mockApi: ApiService = {
 
     getMyBids: async () => {
         await delay(500);
-        return [];
+
+        // Generate dummy bids based on mock auctions
+        const dummyBids = MOCK_AUCTIONS.slice(0, 5).map((auction, index) => {
+            const isWinning = index % 2 === 0; // Alternate winning status
+            return {
+                id: 1000 + index,
+                auctionId: auction.auctionItemId,
+                auctionTitle: auction.title,
+                bidderId: 1,
+                bidderNickname: "Me",
+                bidAmount: auction.currentPrice - (isWinning ? 0 : 5000), // Winning matches current, losing is lower
+                status: "ACTIVE" as const,
+                isWinning: isWinning,
+                createdAt: new Date(Date.now() - 86400000 * (index + 1)).toISOString()
+            };
+        });
+
+        return dummyBids;
     },
 
     getAuctionBids: async (auctionId: number) => {

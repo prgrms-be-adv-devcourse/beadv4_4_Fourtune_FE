@@ -269,6 +269,21 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+.textBtn {
+    background: none;
+    border: none;
+    color: #888;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.textBtn:hover {
+    color: #1b4d3e;
+}
+
 .emptyState {
     text-align: center;
     padding: 80px 0;

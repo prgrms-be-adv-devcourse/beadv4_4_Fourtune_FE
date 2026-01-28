@@ -104,6 +104,7 @@ export interface BidResponse {
     status: BidStatus;
     isWinning: boolean;
     createdAt: string;
+    auctionTitle?: string;
 }
 
 export interface BidDetailResponse extends BidResponse {

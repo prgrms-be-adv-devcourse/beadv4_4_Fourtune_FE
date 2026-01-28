@@ -130,11 +130,12 @@ const MyPage: React.FC = () => {
                                     <span className={`${classes.badge} ${classes.badgeType}`}>상위입찰 존재</span>
                                 )}
                             </div>
-                            <h3 className={classes.cardTitle}>
-                                <Link to={`/auctions/${bid.auctionId}`}>
-                                    경매 상품 View Detail &rarr;
+                            <h3 className={classes.cardTitle}>{bid.auctionTitle || '상품 정보 없음'}</h3>
+                            <div style={{ marginBottom: '12px' }}>
+                                <Link to={`/auctions/${bid.auctionId}`} className={classes.textBtn}>
+                                    경매 상품 상세보기 &rarr;
                                 </Link>
-                            </h3>
+                            </div>
                             <div className={classes.cardBody}>
                                 <div className={classes.priceInfo}>
                                     <span className={classes.priceLabel}>나의 입찰가</span>

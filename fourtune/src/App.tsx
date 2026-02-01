@@ -14,12 +14,14 @@ import Cart from './pages/Cart/Cart';
 import OrderSheet from './pages/Order/OrderSheet';
 import MyOrders from './pages/MyPage/MyOrders';
 import SettlementPage from './pages/Settlement/Settlement';
+import LoginSuccess from './pages/Auth/LoginSuccess';
 
 function App() {
     return (
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+            <Route path="/login-success" element={<LoginSuccess />} />
             <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
                 <Route path="auctions" element={<AuctionList />} />

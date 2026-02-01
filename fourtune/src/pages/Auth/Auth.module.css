@@ -78,3 +78,48 @@
 .link:hover {
     text-decoration: underline;
 }
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
+}
+
+.divider::before,
+.divider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.divider::before {
+    margin-right: 0.5rem;
+}
+
+.divider::after {
+    margin-left: 0.5rem;
+}
+
+.socialContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+}
+
+/* Image acts as button */
+.googleImgBtn {
+    cursor: pointer;
+    transition: opacity 0.2s;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+}
+
+.googleImgBtn:hover {
+    opacity: 0.9;
+}

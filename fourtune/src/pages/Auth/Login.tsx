@@ -71,6 +71,18 @@ const Login: React.FC = () => {
                         {isLoading ? '로그인 중...' : '로그인'}
                     </button>
                 </form>
+
+                <div className={classes.divider}>또는</div>
+
+                <div className={classes.socialContainer}>
+                    <img
+                        src="/src/assets/social/google/si/web_light_sq_SI@1x.png"
+                        srcSet="/src/assets/social/google/si/web_light_sq_SI@1x.png 1x, /src/assets/social/google/si/web_light_sq_SI@2x.png 2x, /src/assets/social/google/si/web_light_sq_SI@3x.png 3x"
+                        alt="Sign in with Google"
+                        className={classes.googleImgBtn}
+                        onClick={() => window.location.href = `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080'}/oauth2/authorization/google`}
+                    />
+                </div>
                 <div className={classes.footer}>
                     계정이 없으신가요?
                     <Link to="/signup" className={classes.link}>회원가입</Link>

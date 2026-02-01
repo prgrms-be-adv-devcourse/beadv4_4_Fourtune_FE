@@ -78,6 +78,9 @@ src/
 │   ├── Auth/       # 로그인, 회원가입
 │   ├── AuctionList/# 메인 리스트
 │   ├── AuctionDetail/# 상세 페이지
+│   ├── Cart/
+│   ├── CreateAuction/
+│   ├── Home/
 │   └── MyPage/     # 마이페이지
 ├── services/       # API 통신 로직
 │   ├── api.ts      # API 진입점 (Mock/Real 분기 처리)

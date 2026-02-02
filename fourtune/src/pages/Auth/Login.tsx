@@ -3,6 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import classes from './Auth.module.css';
 import { api } from '../../services/api';
 
+import googleSignIn1x from '../../assets/social/google/si/web_light_sq_SI@1x.png';
+import googleSignIn2x from '../../assets/social/google/si/web_light_sq_SI@2x.png';
+import googleSignIn3x from '../../assets/social/google/si/web_light_sq_SI@3x.png';
+
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -76,8 +80,8 @@ const Login: React.FC = () => {
 
                 <div className={classes.socialContainer}>
                     <img
-                        src="/src/assets/social/google/si/web_light_sq_SI@1x.png"
-                        srcSet="/src/assets/social/google/si/web_light_sq_SI@1x.png 1x, /src/assets/social/google/si/web_light_sq_SI@2x.png 2x, /src/assets/social/google/si/web_light_sq_SI@3x.png 3x"
+                        src={googleSignIn1x}
+                        srcSet={`${googleSignIn1x} 1x, ${googleSignIn2x} 2x, ${googleSignIn3x} 3x`}
                         alt="Sign in with Google"
                         className={classes.googleImgBtn}
                         onClick={() => window.location.href = `${import.meta.env.VITE_BACKEND_URL || 'http://localhost:8080'}/oauth2/authorization/google`}

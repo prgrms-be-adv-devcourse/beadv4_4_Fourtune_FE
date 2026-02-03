@@ -16,6 +16,7 @@ const AuctionDetail: React.FC = () => {
     const [isWishlisted, setIsWishlisted] = useState(false);
     // Order status check for Buy Now
     const [myOrder, setMyOrder] = useState<OrderDetailResponse | null>(null);
+    const [bidAmount, setBidAmount] = useState<number>(0);
 
     useEffect(() => {
         if (id) {
@@ -60,6 +61,13 @@ const AuctionDetail: React.FC = () => {
         }
     }, [id]);
 
+    // Initialize bid amount when item is loaded
+    useEffect(() => {
+        if (item) {
+            setBidAmount(item.currentPrice + 1000);
+        }
+    }, [item]);
+
     const checkAuth = () => {
         if (!api.isAuthenticated()) {
             alert('로그인이 필요한 서비스입니다.');
@@ -68,21 +76,21 @@ const AuctionDetail: React.FC = () => {
         return true;
     };
 
-    const handleBid = async () => {
+    const handleBidSubmit = async () => {
         if (!item) return;
         if (!checkAuth()) return;
 
-        const bidAmountStr = prompt(`입찰하실 금액을 입력해주세요. (현재가: ${item.currentPrice.toLocaleString()}원)`);
-        if (!bidAmountStr) return;
+        const minBid = item.currentPrice + 1000;
 
-        const bidAmount = Number(bidAmountStr.replace(/,/g, ''));
-        if (isNaN(bidAmount)) {
-            alert('유효한 숫자를 입력해주세요.');
+        // 1. Validation: Verify minimum bid amount
+        if (bidAmount < minBid) {
+            alert(`최소 입찰 금액은 ${minBid.toLocaleString()}원부터 가능합니다.`);
+            setBidAmount(minBid); // Auto-correct layout for convenience after alert
             return;
         }
 
-        if (bidAmount <= item.currentPrice) {
-            alert('입찰 금액은 현재가보다 높아야 합니다.');
+        // 2. Confirmation: Ask user before proceeding
+        if (!confirm(`${bidAmount.toLocaleString()}원에 입찰하시겠습니까?`)) {
             return;
         }
 
@@ -92,6 +100,7 @@ const AuctionDetail: React.FC = () => {
             // Refresh item data
             const updatedItem = await api.getAuctionById(item.auctionItemId);
             setItem(updatedItem);
+            setBidAmount(updatedItem.currentPrice + 1000); // Reset bid amount to new min
         } catch (error: any) {
             console.error('Bidding failed', error);
             const errorMessage = error.response?.data?.message || '입찰에 실패했습니다.';
@@ -249,9 +258,40 @@ const AuctionDetail: React.FC = () => {
                         <div className={classes.actionButtons}>
                             {item.status === AuctionStatus.ACTIVE && new Date() <= new Date(item.endAt) && (
                                 <>
-                                    <button onClick={handleBid} className={`btn btn-primary ${classes.bidButton}`}>
-                                        입찰하기
-                                    </button>
+                                    <div className={classes.bidControl}>
+                                        <div className={classes.bidStepper}>
+                                            <button
+                                                onClick={() => setBidAmount(prev => Math.max((item.currentPrice || 0) + 1000, prev - 1000))}
+                                                className={classes.stepperBtn}
+                                                disabled={bidAmount <= (item.currentPrice || 0) + 1000}
+                                            >
+                                                -
+                                            </button>
+                                            <input
+                                                type="text"
+                                                className={classes.bidInput}
+                                                value={bidAmount ? bidAmount.toLocaleString() : ''}
+                                                onChange={(e) => {
+                                                    const val = Number(e.target.value.replace(/,/g, ''));
+                                                    if (!isNaN(val)) setBidAmount(val);
+                                                }}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') {
+                                                        handleBidSubmit();
+                                                    }
+                                                }}
+                                            />
+                                            <button
+                                                onClick={() => setBidAmount(prev => prev + 1000)}
+                                                className={classes.stepperBtn}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                        <button onClick={handleBidSubmit} className={`btn btn-primary ${classes.bidSubmitButton}`}>
+                                            {bidAmount.toLocaleString()}원 입찰하기
+                                        </button>
+                                    </div>
                                     {/* Show Buy Now and Cart only if buyNowPrice is set (optional feature) */}
                                     {/* Backend might send 0 or undefined if not set. Check strict positive constraint if needed */}
                                     {(item.buyNowPrice && item.buyNowPrice > 0) && (

@@ -201,6 +201,69 @@
 }
 
 .bidButton {
+    /* Legacy class kept for safety, but unused now */
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.bidControl {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.bidStepper {
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    height: 48px;
+}
+
+.stepperBtn {
+    width: 48px;
+    height: 100%;
+    border: none;
+    background: #f8f9fa;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    color: var(--color-text-main);
+}
+
+.stepperBtn:hover:not(:disabled) {
+    background: #e9ecef;
+}
+
+.stepperBtn:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+.bidInput {
+    flex: 1;
+    height: 100%;
+    text-align: center;
+    border: none;
+    border-left: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    font-size: 1.1rem;
+    font-weight: 600;
+    background: white;
+    color: var(--color-text-main);
+    outline: none;
+}
+
+.bidInput:focus {
+    background-color: #f8f9fa;
+    color: var(--color-primary);
+}
+
+.bidSubmitButton {
     width: 100%;
     padding: 1rem;
     font-size: 1.1rem;

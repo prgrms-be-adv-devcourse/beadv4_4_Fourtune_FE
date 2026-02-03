@@ -27,6 +27,8 @@
 .backButton {
     position: absolute;
     left: 0;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .title {
@@ -143,15 +145,7 @@
         grid-template-columns: 1fr;
     }
 
-    .header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .title {
-        text-align: left;
-        font-size: 1.5rem;
-    }
+    /* Removed conflicting header/title styles to keep title centered on mobile */
 }
 
 /* Toggle Switch Styles */

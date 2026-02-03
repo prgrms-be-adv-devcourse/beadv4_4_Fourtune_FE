@@ -29,6 +29,7 @@ coverage/
 .vscode/*
 !.vscode/extensions.json
 .idea/
+*.iml
 .DS_Store
 *.suo
 *.ntvs*
@@ -36,7 +37,16 @@ coverage/
 *.sln
 *.sw?
 
+# IntelliJ specific files (sometimes shown individually)
+misc.xml
+modules.xml
+vcs.xml
+Project_Default.xml
+
 # Temp files
 *.tmp
 *.temp
 *.bak
+
+# GitHub Copilot (local data)
+copilot.data.migration.*.xml

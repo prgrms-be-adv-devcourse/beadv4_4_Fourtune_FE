@@ -76,6 +76,7 @@ export const realApi: ApiService = {
             // These fields are not in the detail response but required by interface
             createdAt: '',
             updatedAt: '',
+            buyNowPrice: data.buyNowPrice,
         };
     },
 

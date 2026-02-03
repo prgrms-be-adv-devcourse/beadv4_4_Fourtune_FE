@@ -11,6 +11,7 @@ const CreateAuction: React.FC = () => {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [images, setImages] = useState<File[]>([]);
+    const [isBuyNowEnabled, setIsBuyNowEnabled] = useState(false); // Toggle state
     const [formData, setFormData] = useState<CreateAuctionRequest>({
         title: '',
         description: '',
@@ -48,8 +49,14 @@ const CreateAuction: React.FC = () => {
         if (!formData.title.trim()) return '제목을 입력해주세요.';
         if (!formData.description.trim()) return '설명을 입력해주세요.';
         if (formData.startPrice <= 0) return '시작가는 0보다 커야 합니다.';
-        if (formData.buyNowPrice && formData.buyNowPrice <= formData.startPrice) {
-            return '즉시구매가는 시작가보다 커야 합니다.';
+
+        if (isBuyNowEnabled) {
+            if (!formData.buyNowPrice || formData.buyNowPrice <= 0) {
+                return '즉시구매가를 입력해주세요.';
+            }
+            if (formData.buyNowPrice <= formData.startPrice) {
+                return '즉시구매가는 시작가보다 커야 합니다.';
+            }
         }
         if (!formData.startAt) return '경매 시작 시간을 입력해주세요.';
         if (!formData.endAt) return '경매 종료 시간을 입력해주세요.';
@@ -75,7 +82,13 @@ const CreateAuction: React.FC = () => {
 
         setIsLoading(true);
         try {
-            const createdAuction = await api.createAuction(formData, images.length > 0 ? images : undefined);
+            // Ensure buyNowPrice is null/undefined if disabled
+            const payload = {
+                ...formData,
+                buyNowPrice: isBuyNowEnabled ? formData.buyNowPrice : undefined
+            };
+
+            const createdAuction = await api.createAuction(payload, images.length > 0 ? images : undefined);
             alert('경매 상품이 등록되었습니다!');
             navigate(`/auctions/${createdAuction.auctionItemId}`);
         } catch (e) {
@@ -181,17 +194,35 @@ const CreateAuction: React.FC = () => {
                         </div>
 
                         <div className={classes.formGroup}>
-                            <label htmlFor="buyNowPrice" className={classes.label}>즉시구매가 (원)</label>
-                            <input
-                                id="buyNowPrice"
-                                name="buyNowPrice"
-                                type="number"
-                                className={classes.input}
-                                placeholder="50000 (선택사항)"
-                                value={formData.buyNowPrice || ''}
-                                onChange={handleInputChange}
-                                min="1"
-                            />
+                            <div className={classes.toggleHeader}>
+                                <label className={classes.label} style={{ marginBottom: 0 }}>즉시구매 설정</label>
+                                <label className={classes.toggleSwitch}>
+                                    <input
+                                        type="checkbox"
+                                        checked={isBuyNowEnabled}
+                                        onChange={(e) => setIsBuyNowEnabled(e.target.checked)}
+                                    />
+                                    <span className={classes.slider}></span>
+                                </label>
+                            </div>
+
+                            {isBuyNowEnabled ? (
+                                <input
+                                    id="buyNowPrice"
+                                    name="buyNowPrice"
+                                    type="number"
+                                    className={classes.input}
+                                    placeholder="50000"
+                                    value={formData.buyNowPrice || ''}
+                                    onChange={handleInputChange}
+                                    min="1"
+                                    style={{ marginTop: '8px' }}
+                                />
+                            ) : (
+                                <div className={classes.disabledInputPlaceholder}>
+                                    즉시구매 비활성화됨
+                                </div>
+                            )}
                         </div>
                     </div>
 

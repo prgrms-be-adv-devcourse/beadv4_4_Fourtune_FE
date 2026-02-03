@@ -235,6 +235,14 @@ const AuctionDetail: React.FC = () => {
                             <div style={{ textAlign: 'right' }}>
                                 <div className={classes.currentPriceLabel}>시작가</div>
                                 <div style={{ fontWeight: 500 }}>{item.startPrice.toLocaleString()}원</div>
+                                <div style={{ marginTop: '8px' }}>
+                                    <div className={classes.currentPriceLabel}>즉시구매가</div>
+                                    <div style={{ fontWeight: 500, color: (item.buyNowPrice && item.buyNowPrice > 0) ? undefined : '#999' }}>
+                                        {(item.buyNowPrice && item.buyNowPrice > 0)
+                                            ? `${item.buyNowPrice.toLocaleString()}원`
+                                            : '즉시구매 불가'}
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
@@ -244,12 +252,18 @@ const AuctionDetail: React.FC = () => {
                                     <button onClick={handleBid} className={`btn btn-primary ${classes.bidButton}`}>
                                         입찰하기
                                     </button>
-                                    <button onClick={handleBuyNow} className={`btn ${classes.buyNowButton}`}>
-                                        즉시 구매
-                                    </button>
-                                    <button onClick={handleAddToCart} className={`btn btn-outline`} style={{ minWidth: '100px' }}>
-                                        장바구니
-                                    </button>
+                                    {/* Show Buy Now and Cart only if buyNowPrice is set (optional feature) */}
+                                    {/* Backend might send 0 or undefined if not set. Check strict positive constraint if needed */}
+                                    {(item.buyNowPrice && item.buyNowPrice > 0) && (
+                                        <>
+                                            <button onClick={handleBuyNow} className={`btn ${classes.buyNowButton}`}>
+                                                즉시 구매 ({item.buyNowPrice.toLocaleString()}원)
+                                            </button>
+                                            <button onClick={handleAddToCart} className={`btn btn-outline`} style={{ minWidth: '100px' }}>
+                                                장바구니
+                                            </button>
+                                        </>
+                                    )}
                                 </>
                             )}
                             {(item.status === AuctionStatus.ACTIVE && new Date() > new Date(item.endAt)) && (

@@ -41,6 +41,7 @@ export interface AuctionItem {
     createdAt: string;
     updatedAt: string;
     sellerName?: string;
+    buyNowPrice?: number;
 }
 
 export interface SearchResponse {

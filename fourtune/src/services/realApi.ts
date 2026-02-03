@@ -136,8 +136,9 @@ export const realApi: ApiService = {
         const { accessToken } = response.data;
         localStorage.setItem('token', accessToken);
 
-        // Since login endpoint only returns token, we might need to decode it or fetch profile
-        // For now, returning mock user context to satisfy interface
+        // Clear potential stale user data from mock sessions
+        localStorage.removeItem('user');
+
         return { user: { email, name: 'User' } };
     },
 
@@ -156,8 +157,40 @@ export const realApi: ApiService = {
     isAuthenticated: () => !!localStorage.getItem('token'),
 
     getCurrentUser: () => {
-        const userStr = localStorage.getItem('user');
-        return userStr ? JSON.parse(userStr) : null;
+        // Do NOT read 'user' from localStorage in realApi as it might be stale mock data
+        // const userStr = localStorage.getItem('user');
+        // if (userStr) return JSON.parse(userStr);
+
+        // Always try to extract from token in real mode
+
+        // If no user object but we have a token, we could try to extract basic info
+        const token = localStorage.getItem('token');
+        if (token) {
+            try {
+                const payload = parseJwt(token);
+                // backend: subject is userId (string)
+                const userId = payload.sub ? Number(payload.sub) : undefined;
+                if (payload && payload.email) {
+                    return { id: userId, email: payload.email, name: 'User' };
+                }
+            } catch (e) {
+                console.error('Failed to parse token', e);
+            }
+        }
+        return null;
+    },
+
+    getUser: async (id: number) => {
+        const response = await client.get(`/api/users/${id}`);
+        const data = response.data;
+        return {
+            id: data.id,
+            email: data.email,
+            nickname: data.nickname,
+            createdAt: data.createdAt,
+            updatedAt: data.updatedAt,
+            status: data.status,
+        };
     },
 
     // Bidding Implementation
@@ -258,3 +291,13 @@ export const realApi: ApiService = {
         return response.data.data; // ApiResponse<List<SettlementCandidatedItemDto>>
     }
 };
+
+function parseJwt(token: string) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}

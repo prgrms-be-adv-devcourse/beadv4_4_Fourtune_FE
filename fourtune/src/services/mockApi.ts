@@ -143,6 +143,18 @@ export const mockApi: ApiService = {
         return userStr ? JSON.parse(userStr) : null;
     },
 
+    getUser: async (id: number) => {
+        await delay(500);
+        return {
+            id,
+            email: 'mock@example.com',
+            nickname: 'Mock User',
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            status: 'ACTIVE'
+        };
+    },
+
     // Bidding Mock
     placeBid: async (auctionId: number, bidAmount: number) => {
         await delay(500);

@@ -295,3 +295,17 @@
     margin-bottom: 16px;
     opacity: 0.3;
 }
+
+.userDetails {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #f0f0f0;
+    text-align: center;
+    /* keep centered like profile */
+}
+
+.detailItem {
+    font-size: 13px;
+    color: #888;
+    margin-bottom: 6px;
+}

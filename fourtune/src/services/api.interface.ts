@@ -11,6 +11,15 @@ import {
     type SettlementCandidatedItemDto
 } from '../types';
 
+export interface UserDetail {
+    id: number;
+    email: string;
+    nickname: string;
+    createdAt: string;
+    updatedAt: string;
+    status: string;
+}
+
 export interface CreateAuctionRequest {
     title: string;
     description: string;
@@ -40,7 +49,8 @@ export interface ApiService {
     signup(nickname: string, email: string, password?: string, phoneNumber?: string): Promise<{ user: { email: string; name: string } }>;
     logout(): void;
     isAuthenticated(): boolean;
-    getCurrentUser(): { email: string; name: string } | null;
+    getCurrentUser(): { id?: number; email: string; name: string } | null;
+    getUser(id: number): Promise<UserDetail>;
 
     // Bidding
     placeBid(auctionId: number, bidAmount: number): Promise<BidDetailResponse>;

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { api } from '../../services/api';
 import { type AuctionItem } from '../../types';
+import { type UserDetail } from '../../services/api.interface';
 import { AuctionCard } from '../../components/features/AuctionCard';
 import classes from './MyPage.module.css';
 import { LoginRequired } from '../../components/common/LoginRequired';
@@ -10,6 +11,7 @@ type Tab = 'wishlist' | 'orders' | 'bids' | 'history';
 
 const MyPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState<Tab>('wishlist');
+    const [userInfo, setUserInfo] = useState<UserDetail | null>(null);
     const [wishlistItems, setWishlistItems] = useState<AuctionItem[]>([]);
     const [orders, setOrders] = useState<any[]>([]);
     const [bids, setBids] = useState<any[]>([]);
@@ -21,6 +23,15 @@ const MyPage: React.FC = () => {
     if (!isAuthenticated) {
         return <LoginRequired message="로그인이 필요한 서비스입니다." />;
     }
+
+    useEffect(() => {
+        const currentUser = api.getCurrentUser();
+        if (currentUser?.id) {
+            api.getUser(currentUser.id)
+                .then(setUserInfo)
+                .catch(err => console.error("Failed to fetch user info", err));
+        }
+    }, []);
 
     useEffect(() => {
         if (activeTab === 'wishlist') fetchWishlist();
@@ -155,9 +166,19 @@ const MyPage: React.FC = () => {
         <div className={classes.container}>
             <aside className={classes.sidebar}>
                 <div className={classes.profileCard}>
-                    <div className={classes.avatar}>{user.name.charAt(0)}</div>
-                    <div className={classes.username}>{user.name}</div>
-                    <div className={classes.email}>{user.email}</div>
+                    <div className={classes.avatar}>{(userInfo?.nickname || user.name).charAt(0)}</div>
+                    <div className={classes.username}>{userInfo?.nickname || user.name}</div>
+                    <div className={classes.email}>{userInfo?.email || user.email}</div>
+                    {userInfo && (
+                        <div className={classes.userDetails}>
+                            <div className={classes.detailItem}>
+                                가입일: {new Date(userInfo.createdAt).toLocaleDateString()}
+                            </div>
+                            <div className={classes.detailItem}>
+                                최근 수정: {new Date(userInfo.updatedAt).toLocaleDateString()}
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <nav className={classes.menu}>
                     <button onClick={() => setActiveTab('wishlist')} className={`${classes.menuItem} ${activeTab === 'wishlist' ? classes.activeMenu : ''}`}>

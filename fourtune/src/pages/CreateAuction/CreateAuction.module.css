@@ -14,14 +14,23 @@
 }
 
 .header {
+    position: relative;
+    /* Context for absolute positioning */
     display: flex;
     align-items: center;
-    gap: 1rem;
+    justify-content: center;
     margin-bottom: 2rem;
+    min-height: 40px;
+    /* Ensure height for absolute button */
+}
+
+.backButton {
+    position: absolute;
+    left: 0;
 }
 
 .title {
-    flex: 1;
+    /* flex: 1; Removed as we want it centered in the container */
     text-align: center;
     font-size: 1.75rem;
     color: var(--color-text-main);
@@ -146,20 +155,38 @@
 }
 
 /* Toggle Switch Styles */
-.toggleHeader {
+.labelHeader {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 0.5rem;
     height: 24px;
-    /* match label height */
+    /* Fix height to ensure alignment between columns */
+}
+
+/* Ensure label inside header has no margin to avoid double spacing */
+.labelHeader .label {
+    margin-bottom: 0;
+}
+
+.toggleWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.toggleStateLabel {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-primary);
 }
 
 .toggleSwitch {
     position: relative;
     display: inline-block;
-    width: 44px;
-    height: 24px;
+    width: 40px;
+    /* Slightly smaller */
+    height: 22px;
 }
 
 .toggleSwitch input {
@@ -175,42 +202,27 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
-    transition: .4s;
+    background-color: #e2e8f0;
+    transition: .3s;
     border-radius: 24px;
 }
 
 .slider:before {
     position: absolute;
     content: "";
-    height: 18px;
-    width: 18px;
+    height: 16px;
+    width: 16px;
     left: 3px;
     bottom: 3px;
     background-color: white;
-    transition: .4s;
+    transition: .3s;
     border-radius: 50%;
 }
 
 input:checked+.slider {
-    background-color: #6C5CE7;
-    /* Primary Color */
+    background-color: var(--color-primary);
 }
 
 input:checked+.slider:before {
-    transform: translateX(20px);
-}
-
-.disabledInputPlaceholder {
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 12px;
-    color: #aaa;
-    font-size: 14px;
-    height: 46px;
-    /* Match input height roughly */
-    display: flex;
-    align-items: center;
-    margin-top: 8px;
+    transform: translateX(18px);
 }

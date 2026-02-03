@@ -12,14 +12,23 @@ const CreateAuction: React.FC = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [images, setImages] = useState<File[]>([]);
     const [isBuyNowEnabled, setIsBuyNowEnabled] = useState(false); // Toggle state
+
+    // Helper to get local ISO string (YYYY-MM-DDTHH:mm) for datetime-local input
+    const getFutureDate = (days: number, minutes: number = 0) => {
+        const date = new Date();
+        date.setDate(date.getDate() + days);
+        date.setMinutes(date.getMinutes() + minutes - date.getTimezoneOffset());
+        return date.toISOString().slice(0, 16);
+    };
+
     const [formData, setFormData] = useState<CreateAuctionRequest>({
         title: '',
         description: '',
         category: AuctionCategory.ETC,
         startPrice: 0,
         buyNowPrice: undefined,
-        startAt: '',
-        endAt: '',
+        startAt: getFutureDate(0, 1), // Default: 1 minute later
+        endAt: getFutureDate(5),      // Default: 5 days later
     });
 
     // Check authentication on mount
@@ -126,7 +135,7 @@ const CreateAuction: React.FC = () => {
         <div className={classes.container}>
             <div className={classes.formCard}>
                 <div className={classes.header}>
-                    <button onClick={() => navigate(-1)} className="btn btn-outline btn-sm">
+                    <button onClick={() => navigate(-1)} className={`btn btn-outline btn-sm ${classes.backButton}`}>
                         ← 뒤로가기
                     </button>
                     <h1 className={classes.title}>경매 상품 등록</h1>
@@ -179,7 +188,9 @@ const CreateAuction: React.FC = () => {
 
                     <div className={classes.formRow}>
                         <div className={classes.formGroup}>
-                            <label htmlFor="startPrice" className={classes.label}>시작가 (원) *</label>
+                            <div className={classes.labelHeader}>
+                                <label htmlFor="startPrice" className={classes.label}>시작가 (원) *</label>
+                            </div>
                             <input
                                 id="startPrice"
                                 name="startPrice"
@@ -194,35 +205,37 @@ const CreateAuction: React.FC = () => {
                         </div>
 
                         <div className={classes.formGroup}>
-                            <div className={classes.toggleHeader}>
-                                <label className={classes.label} style={{ marginBottom: 0 }}>즉시구매 설정</label>
-                                <label className={classes.toggleSwitch}>
-                                    <input
-                                        type="checkbox"
-                                        checked={isBuyNowEnabled}
-                                        onChange={(e) => setIsBuyNowEnabled(e.target.checked)}
-                                    />
-                                    <span className={classes.slider}></span>
-                                </label>
+                            <div className={classes.labelHeader}>
+                                <label className={classes.label}>즉시구매가 (원)</label>
+                                <div className={classes.toggleWrapper}>
+                                    <span className={classes.toggleStateLabel}>{isBuyNowEnabled ? 'ON' : 'OFF'}</span>
+                                    <label className={classes.toggleSwitch}>
+                                        <input
+                                            type="checkbox"
+                                            checked={isBuyNowEnabled}
+                                            onChange={(e) => setIsBuyNowEnabled(e.target.checked)}
+                                        />
+                                        <span className={classes.slider}></span>
+                                    </label>
+                                </div>
                             </div>
 
-                            {isBuyNowEnabled ? (
-                                <input
-                                    id="buyNowPrice"
-                                    name="buyNowPrice"
-                                    type="number"
-                                    className={classes.input}
-                                    placeholder="50000"
-                                    value={formData.buyNowPrice || ''}
-                                    onChange={handleInputChange}
-                                    min="1"
-                                    style={{ marginTop: '8px' }}
-                                />
-                            ) : (
-                                <div className={classes.disabledInputPlaceholder}>
-                                    즉시구매 비활성화됨
-                                </div>
-                            )}
+                            <input
+                                id="buyNowPrice"
+                                name="buyNowPrice"
+                                type="number"
+                                className={classes.input}
+                                placeholder={isBuyNowEnabled ? "50000" : "사용 안 함"}
+                                value={formData.buyNowPrice || ''}
+                                onChange={handleInputChange}
+                                min="1"
+                                disabled={!isBuyNowEnabled}
+                                style={{
+                                    backgroundColor: isBuyNowEnabled ? 'white' : '#f8f9fa',
+                                    color: isBuyNowEnabled ? 'inherit' : '#aaa',
+                                    border: isBuyNowEnabled ? '1px solid var(--color-border)' : '1px dashed #ddd'
+                                }}
+                            />
                         </div>
                     </div>
 

@@ -169,6 +169,7 @@ export const realApi: ApiService = {
             try {
                 const payload = parseJwt(token);
                 // backend: subject is userId (string)
+                console.log('realApi: Token payload', payload);
                 const userId = payload.sub ? Number(payload.sub) : undefined;
                 if (payload && payload.email) {
                     return { id: userId, email: payload.email, name: 'User' };

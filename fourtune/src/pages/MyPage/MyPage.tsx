@@ -26,10 +26,16 @@ const MyPage: React.FC = () => {
 
     useEffect(() => {
         const currentUser = api.getCurrentUser();
+        console.log('MyPage: currentUser from token', currentUser);
         if (currentUser?.id) {
             api.getUser(currentUser.id)
-                .then(setUserInfo)
+                .then(data => {
+                    console.log('MyPage: Fetched user info', data);
+                    setUserInfo(data);
+                })
                 .catch(err => console.error("Failed to fetch user info", err));
+        } else {
+            console.warn('MyPage: No user ID found in token');
         }
     }, []);
 

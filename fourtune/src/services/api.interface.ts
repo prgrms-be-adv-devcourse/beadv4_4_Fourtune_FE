@@ -15,9 +15,9 @@ export interface UserDetail {
     id: number;
     email: string;
     nickname: string;
-    createdAt: string;
-    updatedAt: string;
-    status: string;
+    createdAt?: string;
+    updatedAt?: string;
+    status?: string;
 }
 
 export interface CreateAuctionRequest {

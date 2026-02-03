@@ -177,12 +177,16 @@ const MyPage: React.FC = () => {
                     <div className={classes.email}>{userInfo?.email || user.email}</div>
                     {userInfo && (
                         <div className={classes.userDetails}>
-                            <div className={classes.detailItem}>
-                                가입일: {new Date(userInfo.createdAt).toLocaleDateString()}
-                            </div>
-                            <div className={classes.detailItem}>
-                                최근 수정: {new Date(userInfo.updatedAt).toLocaleDateString()}
-                            </div>
+                            {userInfo.createdAt && (
+                                <div className={classes.detailItem}>
+                                    가입일: {new Date(userInfo.createdAt).toLocaleDateString()}
+                                </div>
+                            )}
+                            {userInfo.updatedAt && (
+                                <div className={classes.detailItem}>
+                                    최근 수정: {new Date(userInfo.updatedAt).toLocaleDateString()}
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
